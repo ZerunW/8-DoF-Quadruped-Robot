@@ -45,7 +45,7 @@ if 'gait_params' not in st.session_state:
         'step_length': 20,
         'step_height': 10,
         'period': 1.0,
-        'center_x': -10,
+        'center_x': -10.0,  # 改为 float
         'center_y': -155.7
     }
 
@@ -382,8 +382,8 @@ with st.sidebar:
         step_length = st.slider("Step Length (mm)", 5, 40, st.session_state.gait_params['step_length'], 1)
         step_height = st.slider("Step Height (mm)", 2, 20, st.session_state.gait_params['step_height'], 1)
         period = st.slider("Period (sec)", 0.5, 2.0, st.session_state.gait_params['period'], 0.1)
-        center_x = st.number_input("Center X (mm)", value=st.session_state.gait_params['center_x'], step=1.0)
-        center_y = st.number_input("Center Y (mm)", value=st.session_state.gait_params['center_y'], step=1.0)
+        center_x = st.number_input("Center X (mm)", value=float(st.session_state.gait_params['center_x']), step=1.0, format="%.1f")
+        center_y = st.number_input("Center Y (mm)", value=float(st.session_state.gait_params['center_y']), step=1.0, format="%.1f")
         
         st.session_state.gait_params = {
             'step_length': step_length,
