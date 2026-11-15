@@ -12,7 +12,7 @@ node replaces the IMU, and the driver's `/servo_state` drives the motor hinges.
 The model `robot_dog_sim/mjcf/robot_dog.xml` is generated from the URDF by
 `pixi run build_mjcf`. It has a free base, 24 hinges, 8 equality constraints closing the leg
 loops, and sphere feet. Servos are position actuators with a ±2 N·m limit and a 400°/s
-slew, the same as the driver's rate limit. Physical parameters are estimates and can be
+slew, the same as the driver's rate limit. Physical parameters can be
 changed live, for example `ros2 param set /sim servo_kp 40.0`.
 
 | Topic / service | |

@@ -1,3 +1,3 @@
 # CAD
 
-Mechanical design files of the robot. Coming soon.
+Mechanical design files of the robot.

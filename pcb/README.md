@@ -1,3 +1,3 @@
 # PCB
 
-Electronics design files of the robot. Coming soon.
+Electronics design files of the robot.
