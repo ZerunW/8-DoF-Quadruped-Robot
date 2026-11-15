@@ -137,7 +137,7 @@ class ControllerParams:
     heading_kp: float = 1.5
     heading_ki: float = 0.0          # rad/s per rad*s
     heading_kd: float = 0.1
-    heading_max_rps: float = 0.4  # output limit (rad/s)
+    heading_max_rps: float = 0.1  # output limit (rad/s)
     heading_use_lateral_accel: bool = False
     heading_lateral_gain: float = 2.0
     heading_lateral_leak_s: float = 1.0

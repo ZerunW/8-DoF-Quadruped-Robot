@@ -24,6 +24,9 @@ simulation on a laptop.
   laptop nor the Pi needs a system ROS install. A deploy terminal syncs and runs everything
   on the Pi from the laptop.
 
+Measured walking performance and current limitations are in the
+[top-level README](../README.md#results).
+
 ## Hardware
 
 | Part | |

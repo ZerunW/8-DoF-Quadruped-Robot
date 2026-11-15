@@ -112,7 +112,7 @@ gait_controller:
     heading_kp: 2.0                  # rad/s per rad of heading error
     heading_ki: 1.0                  # rad/s per rad*s
     heading_kd: 0.15                 # rad/s per rad/s
-    heading_max_rps: 0.4             # heading-hold output limit and turning headroom (rad/s)
+    heading_max_rps: 0.1             # heading-hold output limit and turning headroom (rad/s)
     heading_use_lateral_accel: false # adds the heading_lateral_* term
     heading_lateral_gain: 2.0        # rad/s per m/s of leaky-integrated lateral velocity
     heading_lateral_leak_s: 1.0      # leak time constant of that integrator
