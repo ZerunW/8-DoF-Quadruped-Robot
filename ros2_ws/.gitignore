@@ -1,0 +1,27 @@
+# pixi
+.pixi/
+!.pixi/config.toml
+
+# colcon
+build/
+install/
+log/
+*.egg-info/
+
+# python
+__pycache__/
+*.pyc
+.cache/
+
+# editors / OS
+.vscode/
+.DS_Store
+
+# deploy terminal
+.deploy_history
+.deploy_config
+
+# recordings and generated data
+data/
+bags/
+logs/

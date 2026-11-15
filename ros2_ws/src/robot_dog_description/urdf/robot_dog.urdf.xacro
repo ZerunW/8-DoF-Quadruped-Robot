@@ -1,0 +1,223 @@
+<?xml version="1.0"?>
+<!--
+  Robot dog (8 DOF, two closed 5-bar loops per leg) as an open-tree URDF.
+
+    xacro robot_dog.urdf.xacro > robot_dog.urdf
+    ros2 launch robot_dog_description description.launch.py
+
+  Geometry comes from config/cad_frames.yaml, generated from the CAD; the meshes are in their
+  link frames, in meters. base_link is the REP-103 body frame (X forward, Y left,
+  Z up) with its origin at the center of the four thigh axes, at thigh axis height. Each leg
+  (lf, rf, lb, rb) has six revolute joints about body Y, all zero at m1 = m2 = 90 deg and
+  positive counter-clockwise in the canonical leg frame of robot_dog_control/kinematics.py.
+  Motor joints: q_thigh = m1 - 90 deg, q_rod = m2 - 90 deg.
+
+    base_link -> <leg>_thigh  (O, motor m1)               -> <leg>_calf (K) -> <leg>_foot (E, fixed)
+    base_link -> <leg>_fan    (O, passive bell crank D/A) -> <leg>_ab_link (A)
+    base_link -> <leg>_rod    (M, motor m2)               -> <leg>_cd_link (C)
+    base_link -> <leg>_servos (fixed: the leg's two servos)
+
+  The loops close at D (cd_link end on the fan) and B (ab_link end on the calf);
+  robot_dog_description.leg_joints gives joint angles that close them. Inertials: CAD volume
+  times the densities below. Collision geometry: a box for the body, cylinders for thigh,
+  calf and ab_link, a sphere for the foot.
+-->
+<robot name="robot_dog" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- ===================================================================== -->
+  <!-- Parameters                                                             -->
+  <!-- ===================================================================== -->
+  <xacro:arg name="mesh_uri" default="package://robot_dog_description/meshes"/>
+  <xacro:property name="mesh_uri" value="$(arg mesh_uri)"/>
+  <!-- path relative to this file -->
+  <xacro:property name="cad" value="${xacro.load_yaml('../config/cad_frames.yaml')}"/>
+
+  <!-- Densities of the printed parts (kg/m^3), mass per servo (kg), and the electronics box
+       in the body (kg, m). -->
+  <xacro:property name="density_fdm" value="1000.0"/>
+  <xacro:property name="density_sla" value="1150.0"/>
+  <xacro:property name="density_tpu" value="1000.0"/>
+  <xacro:property name="servo_mass" value="0.060"/>
+  <xacro:property name="electronics_mass" value="0.100"/>
+  <xacro:property name="electronics_xyz" value="0.010 0.0 -0.010"/>
+  <xacro:property name="electronics_size" value="0.090 0.060 0.020"/>
+
+  <!-- Joint limits (rad), symmetric about the zero pose m = 90 deg. Passive joints are free. -->
+  <xacro:property name="thigh_lim" value="${radians(105)}"/>
+  <xacro:property name="rod_lim" value="${radians(52)}"/>
+  <xacro:property name="servo_effort" value="2.0"/>      <!-- N m -->
+  <xacro:property name="servo_velocity" value="7.5"/>    <!-- rad/s -->
+
+  <xacro:property name="axis" value="${cad['canonical_frame']['joint_axis']}"/>
+
+  <!-- ===================================================================== -->
+  <!-- Materials                                                              -->
+  <!-- ===================================================================== -->
+  <material name="body_grey"><color rgba="0.30 0.32 0.36 1.0"/></material>
+  <material name="cover_grey"><color rgba="0.78 0.80 0.82 1.0"/></material>
+  <material name="servo_black"><color rgba="0.08 0.08 0.09 1.0"/></material>
+  <material name="sla_blue"><color rgba="0.55 0.70 0.90 1.0"/></material>
+  <material name="fdm_orange"><color rgba="0.95 0.55 0.15 1.0"/></material>
+  <material name="link_white"><color rgba="0.92 0.92 0.90 1.0"/></material>
+  <material name="tpu_black"><color rgba="0.15 0.15 0.15 1.0"/></material>
+  <xacro:property name="part_material"
+                  value="${dict(thigh='sla_blue', calf='fdm_orange', foot='tpu_black',
+                                fan='link_white', rod='sla_blue', cd_link='link_white',
+                                ab_link='link_white', servos='servo_black')}"/>
+
+  <!-- ===================================================================== -->
+  <!-- Macros                                                                 -->
+  <!-- ===================================================================== -->
+  <!-- inertial of a CAD part: mass = density * volume, I = density * I_unit -->
+  <xacro:macro name="cad_inertial" params="key density">
+    <xacro:property name="ip" value="${cad['inertials'][key]}"/>
+    <xacro:property name="iu" value="${ip['inertia_per_density']}"/>
+    <inertial>
+      <origin xyz="${ip['com'][0]} ${ip['com'][1]} ${ip['com'][2]}" rpy="0 0 0"/>
+      <mass value="${density * ip['volume_m3']}"/>
+      <inertia ixx="${density * iu['ixx']}" ixy="${density * iu['ixy']}"
+               ixz="${density * iu['ixz']}" iyy="${density * iu['iyy']}"
+               iyz="${density * iu['iyz']}" izz="${density * iu['izz']}"/>
+    </inertial>
+  </xacro:macro>
+
+  <xacro:macro name="mesh_visual" params="key material">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><mesh filename="${mesh_uri}/${key}.stl"/></geometry>
+      <material name="${material}"/>
+    </visual>
+  </xacro:macro>
+
+  <!-- collision primitive of a part (cad_frames.yaml collisions[key]) -->
+  <xacro:macro name="cad_collision" params="key">
+    <xacro:if value="${key in cad['collisions']}">
+      <xacro:property name="c" value="${cad['collisions'][key]}"/>
+      <xacro:if value="${c['type'] == 'capsule'}">
+        <collision>
+          <origin xyz="${c['cyl_xyz'][0]} ${c['cyl_xyz'][1]} ${c['cyl_xyz'][2]}"
+                  rpy="${c['cyl_rpy'][0]} ${c['cyl_rpy'][1]} ${c['cyl_rpy'][2]}"/>
+          <geometry><cylinder radius="${c['radius']}" length="${c['cyl_length']}"/></geometry>
+        </collision>
+      </xacro:if>
+      <xacro:if value="${c['type'] == 'sphere'}">
+        <collision>
+          <origin xyz="${c['center'][0]} ${c['center'][1]} ${c['center'][2]}" rpy="0 0 0"/>
+          <geometry><sphere radius="${c['radius']}"/></geometry>
+        </collision>
+      </xacro:if>
+    </xacro:if>
+  </xacro:macro>
+
+  <!-- one part of a leg: link (mesh, collision, inertial) + the joint to its parent -->
+  <xacro:macro name="leg_part" params="leg part jtype lim:=0 effort:=0 velocity:=100">
+    <xacro:property name="side" value="${cad['legs'][leg]['side']}"/>
+    <xacro:property name="key" value="${side}_${part}"/>
+    <xacro:property name="j" value="${cad['legs'][leg]['joints'][part]}"/>
+    <xacro:property name="material" value="${cad['inertials'][key]['material']}"/>
+    <link name="${leg}_${part}">
+      <xacro:mesh_visual key="${key}" material="${part_material[part]}"/>
+      <xacro:cad_collision key="${key}"/>
+      <xacro:if value="${material == 'servo'}">
+        <xacro:cad_inertial key="${key}"
+                            density="${2 * servo_mass / cad['inertials'][key]['volume_m3']}"/>
+      </xacro:if>
+      <xacro:unless value="${material == 'servo'}">
+        <xacro:cad_inertial key="${key}" density="${dict(fdm=density_fdm, sla=density_sla,
+                                                         tpu=density_tpu)[material]}"/>
+      </xacro:unless>
+    </link>
+    <joint name="${leg}_${part}_joint" type="${jtype}">
+      <parent link="${'base_link' if j['parent'] == 'base_link' else leg + '_' + j['parent']}"/>
+      <child link="${leg}_${part}"/>
+      <origin xyz="${j['xyz'][0]} ${j['xyz'][1]} ${j['xyz'][2]}" rpy="0 0 0"/>
+      <xacro:if value="${jtype == 'revolute'}">
+        <axis xyz="${axis[0]} ${axis[1]} ${axis[2]}"/>
+        <limit lower="${-lim}" upper="${lim}" effort="${effort}" velocity="${velocity}"/>
+      </xacro:if>
+    </joint>
+  </xacro:macro>
+
+  <xacro:macro name="leg" params="leg">
+    <xacro:leg_part leg="${leg}" part="servos" jtype="fixed"/>
+    <!-- motor m1 at O -->
+    <xacro:leg_part leg="${leg}" part="thigh" jtype="revolute" lim="${thigh_lim}"
+                    effort="${servo_effort}" velocity="${servo_velocity}"/>
+    <xacro:leg_part leg="${leg}" part="calf" jtype="revolute" lim="${pi}"/>
+    <xacro:leg_part leg="${leg}" part="foot" jtype="fixed"/>
+    <!-- passive bell crank on the thigh axis O, and the A-B link -->
+    <xacro:leg_part leg="${leg}" part="fan" jtype="revolute" lim="${pi}"/>
+    <xacro:leg_part leg="${leg}" part="ab_link" jtype="revolute" lim="${pi}"/>
+    <!-- motor m2 at M: crank M-C, and the C-D link -->
+    <xacro:leg_part leg="${leg}" part="rod" jtype="revolute" lim="${rod_lim}"
+                    effort="${servo_effort}" velocity="${servo_velocity}"/>
+    <xacro:leg_part leg="${leg}" part="cd_link" jtype="revolute" lim="${pi}"/>
+  </xacro:macro>
+
+  <!-- ===================================================================== -->
+  <!-- Body                                                                   -->
+  <!-- ===================================================================== -->
+  <!-- base_link carries the collision box; the body mesh and mass are on the fixed child "body". -->
+  <xacro:property name="base_box" value="${cad['collisions']['base']}"/>
+  <link name="base_link">
+    <collision>
+      <origin xyz="${base_box['center'][0]} ${base_box['center'][1]} ${base_box['center'][2]}"
+              rpy="0 0 0"/>
+      <geometry>
+        <box size="${base_box['size'][0]} ${base_box['size'][1]} ${base_box['size'][2]}"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="body">
+    <xacro:mesh_visual key="body" material="body_grey"/>
+    <xacro:cad_inertial key="body" density="${density_fdm}"/>
+  </link>
+  <joint name="body_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="body"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <link name="top_cover">
+    <xacro:mesh_visual key="top_cover" material="cover_grey"/>
+    <xacro:cad_inertial key="top_cover" density="${density_fdm}"/>
+  </link>
+  <joint name="top_cover_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="top_cover"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <!-- electronics, not in the CAD: a solid box -->
+  <xacro:property name="es" value="${[float(v) for v in electronics_size.split()]}"/>
+  <link name="electronics">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="${electronics_mass}"/>
+      <inertia ixx="${electronics_mass * (es[1]**2 + es[2]**2) / 12}" ixy="0" ixz="0"
+               iyy="${electronics_mass * (es[0]**2 + es[2]**2) / 12}" iyz="0"
+               izz="${electronics_mass * (es[0]**2 + es[1]**2) / 12}"/>
+    </inertial>
+  </link>
+  <joint name="electronics_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="electronics"/>
+    <origin xyz="${electronics_xyz}" rpy="0 0 0"/>
+  </joint>
+
+  <!-- BNO055 frame, aligned with the body axes by the P7 axis remap, at the base_link
+       origin. -->
+  <link name="imu_link"/>
+  <joint name="imu_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="imu_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <xacro:leg leg="lf"/>
+  <xacro:leg leg="rf"/>
+  <xacro:leg leg="lb"/>
+  <xacro:leg leg="rb"/>
+
+</robot>

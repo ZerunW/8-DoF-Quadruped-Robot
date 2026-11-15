@@ -1,0 +1,167 @@
+# Robot dog configuration, one section per node.
+#
+# Units: servo angles in servo degrees (1 unit = 1 deg), lengths in mm, times in s, speeds in
+# m/s and rad/s, unless the key's suffix says otherwise.
+# Frames: REP-103 body frame (x forward, y left, z up); +pitch = nose down, +roll = right side
+# down, +yaw = counterclockwise. Leg order: lf, rf, lb, rb.
+# IK motor angles (m1 thigh, m2 calf) map to servo angles as s = m + 90 on the left legs and
+# s = 360 - (m + 90) on the right legs.
+# servo_tune and calib_offsets print ROBOT_DOG_CONFIG_UPDATE lines; the deploy terminal writes
+# them into this file.
+
+servo_driver:
+  ros__parameters:
+    i2c_bus: 1                      # Linux I2C bus number
+    pca_address: 0x40               # PCA9685 7-bit I2C address
+    oscillator_hz: 27000000         # PCA9685 oscillator frequency (Hz)
+    pwm_hz: 50                      # servo frame rate (Hz)
+    pulse_min_us: 500               # pulse width at servo angle 0 (us)
+    pulse_max_us: 2500              # pulse width at servo_range_deg (us)
+    servo_range_deg: 360.0          # servo travel over the pulse range
+    fake_hw: false                  # true: no I2C, frames are only recorded
+    cmd_timeout_s: 0.5              # warn and hold the pose when /servo_cmd stops this long
+    max_servo_speed_dps: 400.0      # per-servo rate limit (deg/s)
+    # Servo index: 0 left_front_bottom, 1 left_front_top, 2 left_back_bottom, 3 left_back_top,
+    # 4 right_front_bottom, 5 right_front_top, 6 right_back_bottom, 7 right_back_top
+    # (top = thigh motor m1, bottom = calf motor m2).
+    servo_channel: [3, 2, 12, 13, 4, 5, 11, 10]      # PCA9685 channel per servo index
+    # calibration offset per servo, added after the clamp
+    servo_offset:  [14.523, 12.287, 20.419, 12.507, 9.52, 5.365, 4.879, 21.827]
+    # clamp limits per servo, applied before the offset
+    servo_min:     [130.0, 118.0, 130.0, 118.0, 139.0, 78.0, 139.0, 78.0]
+    servo_max:     [221.0, 282.0, 221.0, 282.0, 230.0, 242.0, 230.0, 242.0]
+    # power-on and shutdown pose
+    stand_angles:  [172.0, 172.0, 172.0, 172.0, 172.0, 172.0, 172.0, 172.0]
+
+gait_controller:
+  ros__parameters:
+    rate_hz: 50.0                    # control loop rate (Hz)
+    imu_topic: /bno055/imu           # sensor_msgs/Imu in the REP-103 body frame
+    leg_names: [lf, rf, lb, rb]
+    leg_thigh_idx: [1, 5, 3, 7]      # servo index of each leg's thigh motor (m1)
+    leg_calf_idx:  [0, 4, 2, 6]      # servo index of each leg's calf motor (m2)
+    leg_mirror_servo: [false, true, false, true]   # right legs reversed
+    leg_x_sign: [-1, -1, -1, -1]     # IK x = leg_x_sign * fx; -1 = knees point back
+    leg_pos_x_mm: [ 91.5,  91.5, -91.5, -91.5]   # hip (thigh axis) x in base_link
+    leg_pos_y_mm: [ 88.2, -88.2,  88.2, -88.2]   # leg (foot) plane y in base_link
+    # leg linkage (mm, phi in deg), named as in kinematics.py
+    geom: {d_x: -20.0, d_y: -20.0, L1: 110.0, L2: 110.0, L2a: 30.0, L3: 24.0, L41: 24.0, L42: 30.0, phi: 90.05, L51: 28.2, L52: 110.0}
+    ik_region_m1:    [28.0, 79.0, 101.0, 190.0]   # joint region knots in m1 (IK deg, all legs)
+    ik_region_m2_lo: [40.0, 40.0, 40.0, 129.0]    # lowest m2 at each knot, linear in between
+    ik_region_m2_hi: [80.0, 131.0, 131.0, 131.0]  # highest m2 at each knot, linear in between
+    stand_height_mm: 155.0           # standing hip height above the plane of the foot centers
+    stand_fx_mm: 12.0                # neutral foothold ahead of the hip
+    rest_height_mm: 70.0             # crouch height of ~/rest
+    height_min_mm: 70.0              # lowest hip height above the foot plane
+    walk_height_min_mm: 116.0        # lowest hip height while the gait runs
+    height_max_mm: 193.0             # highest hip height above the foot plane
+    pose_pitch_max_deg: 10.0         # pitch limit, |pitch|/pitch_max + |roll|/roll_max <= 1
+    pose_roll_max_deg: 8.0           # roll limit
+    pose_x_max_mm: 0.0               # largest fore/aft body shift over the feet
+    pose_rate_dps: 20.0              # pitch/roll slew of ~/stand and ~/rest (deg/s)
+    gait_schedule: [trot, trot, bound]           # preset used from each knot speed
+    gait_schedule_speeds_mps: [0.0, 0.16, 0.3]   # knot speeds (m/s)
+    gait_switch_hysteresis_mps: 0.01  # speed hysteresis of a pattern switch (m/s)
+    gait_switch_periods: 1.0         # blend time of a pattern switch, in periods (>= 0.5)
+    gait_presets:
+      trot:                          # diagonal pairs (lf, rb) / (rf, lb)
+        offsets: [0.0, 0.5, 0.5, 0.0]                 # phase of lf, rf, lb, rb (period fraction)
+        duty: 0.7                                     # stance fraction of the period
+        period_s: 0.6                                 # cycle time
+        step_height_mm: 20.0                          # swing apex
+        swing_x: [0.0, 0.0, 0.5, 1.0, 1.0]            # Bezier points, fore/aft progress 0..1
+        swing_z: [0.0, 0.7854, 1.6195, 0.7854, 0.0]   # Bezier points, lift / step_height_mm
+      walk:                          # one leg at a time, touch-down order lb, lf, rb, rf
+        offsets: [0.0, 0.5, 0.25, 0.75]
+        duty: 0.8
+        period_s: 0.9
+        step_height_mm: 20.0
+        swing_x: [0.0, 0.0, 0.5, 1.0, 1.0]
+        swing_z: [0.0, 0.7854, 1.6195, 0.7854, 0.0]
+      pace:                          # lateral pairs (lf, lb) / (rf, rb)
+        offsets: [0.0, 0.5, 0.0, 0.5]
+        duty: 0.85
+        period_s: 1.2
+        step_height_mm: 20.0
+        swing_x: [0.0, 0.0, 0.5, 1.0, 1.0]
+        swing_z: [0.0, 0.7854, 1.6195, 0.7854, 0.0]
+      bound:                         # front pair, then back pair, with flight phases
+        offsets: [0.0, 0.0, 0.5, 0.5]
+        duty: 0.4
+        period_s: 0.4
+        step_height_mm: 20.0
+        swing_x: [0.0, 0.0, 0.5, 1.0, 1.0]
+        swing_z: [0.0, 0.7854, 1.6195, 0.7854, 0.0]
+    max_stride_mm: 65.0              # longest stride of any gait
+    max_speed_mps: 0.12              # body speed cap (m/s)
+    max_turn_rps: 0.6                # commanded yaw rate cap (rad/s)
+    turn_stride_gain: 1.0            # k in v_side = v -+ k w half_track
+    ramp_time_s: 0.5                 # speed ramp 0 to max, and gait start/stop
+    cmd_vel_timeout_s: 1.0           # /cmd_vel and /cmd_step expire after this long
+    level_enable: true               # IMU leveling; default of bringup's level:= argument
+    level_kp: 1.25                   # deg of correction per deg of tilt error
+    level_ki: 0.31                   # deg per deg*s
+    level_kd: 0.031                  # deg per deg/s of gyro rate
+    level_lpf_hz: 3.0                # low-pass on the tilt error for P and I (Hz)
+    level_deadband_deg: 1.0          # hold inside this tilt error; once outside, run to 1/4 of it
+    level_max_deg: 15.0              # bound on |u_roll| + |u_pitch| (deg)
+    level_walk_gain_scale: 0.5       # scale on the leveling gains and level_max_deg while walking
+    level_target_roll_deg: -2.3      # IMU roll that counts as level (deg)
+    level_target_pitch_deg: 0.0      # IMU pitch that counts as level (deg)
+    heading_hold_enable: true        # yaw PID while walking without a commanded turn
+    heading_kp: 2.0                  # rad/s per rad of heading error
+    heading_ki: 1.0                  # rad/s per rad*s
+    heading_kd: 0.15                 # rad/s per rad/s
+    heading_max_rps: 0.4             # heading-hold output limit and turning headroom (rad/s)
+    heading_use_lateral_accel: false # adds the heading_lateral_* term
+    heading_lateral_gain: 2.0        # rad/s per m/s of leaky-integrated lateral velocity
+    heading_lateral_leak_s: 1.0      # leak time constant of that integrator
+    leg_trim_mm: [0.0, 0.0, 0.0, 0.0]    # per-leg foot height trim, + = foot toward the hip
+    leg_trim_x_mm: [0.0, 0.0, 0.0, 0.0]  # per-leg fore/aft foot trim, + = toward the nose
+    startup_blend_s: 2.0             # blend from the measured pose at startup and after ESTOP
+    height_rate_mmps: 30.0           # height and x slew of ~/stand, ~/rest and the walking floor
+    imu_timeout_s: 0.5               # older IMU data: leveling holds, heading hold off
+    # servo_min / servo_max come from servo_driver through the launch files.
+
+bno055:
+  ros__parameters:
+    # ros-humble-bno055 driver
+    ros_topic_prefix: "bno055/"
+    connection_type: "i2c"
+    i2c_bus: 1
+    i2c_addr: 0x28
+    frame_id: "imu_link"
+    data_query_frequency: 50    # Hz
+    calib_status_frequency: 1.0 # Hz, /bno055/calib_status
+    operation_mode: 0x08        # IMUPLUS: accel+gyro fusion, no magnetometer
+    placement_axis_remap: "P7"  # board mounted X back, Y left, Z down; P7 maps it to REP-103
+
+joy_node:
+  ros__parameters:
+    # ros-humble-joy; the DualSense connects over Bluetooth (pixi run pair_gamepad).
+    device_id: 0                # first gamepad
+    deadzone: 0.05              # SDL-level deadzone, applied before gamepad_teleop's own
+    autorepeat_rate: 20.0       # Hz: republish the state while idle
+
+gamepad_teleop:
+  ros__parameters:
+    # Tank drive while L1 is held: w = (vR - vL) / (2 * half track). Speed, turn and height
+    # limits come from the running gait_controller.
+    axis_left_y: 1              # left side ground speed vL (up = forward)
+    axis_right_y: 4             # right side ground speed vR (up = forward)
+    button_l1: 4                # deadman: nothing moves unless held; holding it steps in place
+    button_cross: 0             # emergency stop (gait_controller/estop), works without L1
+    button_options: 9           # stand (gait_controller/stand), re-arms after an estop
+    button_r1: 5                # raise the body while held, without L1
+    button_r2: 7                # lower the body while held, without L1
+    axis_r2: 5                  # R2 trigger axis; pressed when > 1.5 from its rest value
+    sign_left_y: 1.0            # -1 flips an axis the driver reports the other way round
+    sign_right_y: 1.0
+    deadzone: 0.1               # stick deadzone, output rescaled from 0 at its edge
+    max_speed_mps: 0.0          # full stick = this side speed; 0 = the controller's max_speed_mps
+    max_turn_rps: 0.5           # cap of w (rad/s), at most the controller's max_turn_rps
+    joy_timeout_s: 0.5          # no Joy message this long: one zero command, streaming stops
+    height_raise_rate_mmps: 80.0  # R1 raise rate
+    height_lower_rate_mmps: 120.0 # R2 lower rate
+    pose_rate_hz: 50.0          # /cmd_pose rate while R1 / R2 is held
+    rate_hz: 20.0               # /cmd_vel and /cmd_step rate while L1 is held

@@ -1,0 +1,462 @@
+# Generated from the CAD STEP export; do not edit by hand.
+units: metres / radians unless the key says _mm / _deg
+cad_frame:
+  note: CAD global frame (mm). body = R_body_from_cad * (cad - origin_cad_mm)
+  lateral_axis: [1.0, 0.0, 0.0]
+  up_axis: [0.0, 0.0, 1.0]
+  left_axis: [1.0, 0.0, 0.0]
+  forward_axis: [0.0, -1.0, 0.0]
+  R_body_from_cad:
+  - [0.0, -1.0, 0.0]
+  - [1.0, 0.0, 0.0]
+  - [0.0, 0.0, 1.0]
+  origin_cad_mm: [-48.5, 74.196, 43.396]
+  origin_note: 'base_link origin: centre of the four thigh axes O in x/y, at the thigh axis height'
+  symmetry_plane_cad_mm: -48.499998
+  leg_plane_cad_mm: {lf: 39.674945, rf: -136.674933, lb: 39.674945, rb: -136.674933}
+  prefix_to_leg: {L1: lf, R1: rf, L2: lb, R2: rb}
+  missing_parts: [L2_ upper leg_SLA.step, L2_ link.step]
+  back_leg_copy_deviation_mm:
+    L2_vs_L1: {O: 0.0, M: 0.2, K: 0.0, C: 0.2, D: 0.0, A: 0.0, B: 0.0, E: 0.0}
+    R2_vs_R1: {O: 0.0, M: 0.2, K: 0.0, C: 0.2, D: 0.0, A: 0.0, B: 0.0, E: 0.0}
+canonical_frame:
+  note: 'kinematics.py leg frame: origin O, +y_c up; +x_c along the knee at m1=90. body = (x_sign * x_c,
+    leg_y, y_c)'
+  x_sign: -1
+  joint_axis: [0.0, 1.0, -0.0]
+  zero_pose_m1_deg: 90.0
+  zero_pose_m2_deg: 90.0
+  zero_pose_points_mm:
+    O: [0.0, 0.0]
+    M: [-20.0, -20.0]
+    K: [77.7817, -77.7817]
+    C: [-36.9706, -3.0294]
+    D: [-17.03, 16.9109]
+    A: [21.1572, 21.2691]
+    B: [98.9389, -56.5126]
+    E: [0.2055, -155.7685]
+  model_geometry: {d_x: -20.0, d_y: -20.0, L1: 110.0, L2: 110.0, L2a: 30.0, L3: 24.0, L41: 24.0, L42: 30.0,
+    phi: 90.05, L51: 28.2, L52: 110.0}
+hip_positions_mm:
+  leg_pos_x_mm: [91.5, 91.5, -91.5, -91.5]
+  leg_pos_y_mm: [88.2, -88.2, 88.2, -88.2]
+  hip_z_mm: [0.0, 0.0, 0.0, 0.0]
+legs:
+  lf:
+    cad_prefix: L1
+    side: left
+    hip_xyz: [0.0915, 0.088175, 0.0]
+    cad_pose_m1_deg: 90.0
+    cad_pose_m2_deg: 90.0
+    fk_residual_mm: 0.290251
+    measured_canonical_mm:
+      O: [0.0, 0.0]
+      M: [-20.142, -19.967]
+      K: [77.782, -77.782]
+      C: [-37.112, -2.997]
+      D: [-16.971, 16.971]
+      A: [21.213, 21.213]
+      B: [98.995, -56.569]
+      E: [0.0, -155.563]
+    measured_lengths: {L1: 110.0, L2: 110.0, L2a: 30.0, L3: 24.0, L41: 24.0, L42: 30.0, phi: 90.0, L51: 28.362,
+      L52: 110.0, d_x: -20.142, d_y: -19.967}
+    part_hole_lengths: {fan O-D (L41): 24.0, fan O-A (L42): 30.0, 'fan D-O-A (phi, deg)': 90.0, rod M-C (L3): 24.0,
+      ab_link A-B (L52): 110.0, calf K-E (L2): 110.0, calf K-B (L2a): 30.0, cd_link C-D (L51): 28.218,
+      cd_link C vs rod C: 0.243, thigh O-K (L1): 110.0}
+    joints:
+      thigh:
+        parent: base_link
+        xyz: [0.0915, 0.088175, 0.0]
+      calf:
+        parent: thigh
+        xyz: [-0.077782, 0.0, -0.077782]
+      foot:
+        parent: calf
+        xyz: [0.077576, 0.0, -0.077987]
+      fan:
+        parent: base_link
+        xyz: [0.0915, 0.088175, 0.0]
+      ab_link:
+        parent: fan
+        xyz: [-0.021157, 0.0, 0.021269]
+      rod:
+        parent: base_link
+        xyz: [0.1115, 0.088175, -0.02]
+      cd_link:
+        parent: rod
+        xyz: [0.016971, 0.0, 0.016971]
+      servos:
+        parent: base_link
+        xyz: [0.0915, 0.088175, 0.0]
+  rf:
+    cad_prefix: R1
+    side: right
+    hip_xyz: [0.0915, -0.088175, 0.0]
+    cad_pose_m1_deg: 90.0
+    cad_pose_m2_deg: 90.0
+    fk_residual_mm: 0.290251
+    measured_canonical_mm:
+      O: [0.0, 0.0]
+      M: [-20.142, -19.967]
+      K: [77.782, -77.782]
+      C: [-37.112, -2.997]
+      D: [-16.971, 16.971]
+      A: [21.213, 21.213]
+      B: [98.995, -56.569]
+      E: [0.0, -155.563]
+    measured_lengths: {L1: 110.0, L2: 110.0, L2a: 30.0, L3: 24.0, L41: 24.0, L42: 30.0, phi: 90.0, L51: 28.362,
+      L52: 110.0, d_x: -20.142, d_y: -19.967}
+    part_hole_lengths: {fan O-D (L41): 24.0, fan O-A (L42): 30.0, 'fan D-O-A (phi, deg)': 90.0, rod M-C (L3): 24.0,
+      ab_link A-B (L52): 110.0, calf K-E (L2): 110.0, calf K-B (L2a): 30.0, cd_link C-D (L51): 28.218,
+      cd_link C vs rod C: 0.243, thigh O-K (L1): 110.0}
+    joints:
+      thigh:
+        parent: base_link
+        xyz: [0.0915, -0.088175, 0.0]
+      calf:
+        parent: thigh
+        xyz: [-0.077782, 0.0, -0.077782]
+      foot:
+        parent: calf
+        xyz: [0.077576, 0.0, -0.077987]
+      fan:
+        parent: base_link
+        xyz: [0.0915, -0.088175, 0.0]
+      ab_link:
+        parent: fan
+        xyz: [-0.021157, 0.0, 0.021269]
+      rod:
+        parent: base_link
+        xyz: [0.1115, -0.088175, -0.02]
+      cd_link:
+        parent: rod
+        xyz: [0.016971, 0.0, 0.016971]
+      servos:
+        parent: base_link
+        xyz: [0.0915, -0.088175, 0.0]
+  lb:
+    cad_prefix: L2
+    side: left
+    hip_xyz: [-0.0915, 0.088175, 0.0]
+    cad_pose_m1_deg: 90.0
+    cad_pose_m2_deg: 90.0
+    fk_residual_mm: 0.290251
+    measured_canonical_mm:
+      O: [0.0, 0.0]
+      M: [-19.942, -19.967]
+      K: [77.782, -77.782]
+      C: [-36.912, -2.997]
+      D: [-16.971, 16.971]
+      A: [21.213, 21.213]
+      B: [98.995, -56.569]
+      E: [0.0, -155.563]
+    measured_lengths: {L1: 110.0, L2: 110.0, L2a: 30.0, L3: 24.0, L41: 24.0, L42: 30.0, phi: 90.0, L51: 28.22,
+      L52: 110.0, d_x: -19.942, d_y: -19.967}
+    part_hole_lengths: {fan O-D (L41): 24.0, fan O-A (L42): 30.0, 'fan D-O-A (phi, deg)': 90.0, rod M-C (L3): 24.0,
+      ab_link A-B (L52): 110.0, calf K-E (L2): 110.0, calf K-B (L2a): 30.0}
+    joints:
+      thigh:
+        parent: base_link
+        xyz: [-0.0915, 0.088175, 0.0]
+      calf:
+        parent: thigh
+        xyz: [-0.077782, 0.0, -0.077782]
+      foot:
+        parent: calf
+        xyz: [0.077576, 0.0, -0.077987]
+      fan:
+        parent: base_link
+        xyz: [-0.0915, 0.088175, 0.0]
+      ab_link:
+        parent: fan
+        xyz: [-0.021157, 0.0, 0.021269]
+      rod:
+        parent: base_link
+        xyz: [-0.0715, 0.088175, -0.02]
+      cd_link:
+        parent: rod
+        xyz: [0.016971, 0.0, 0.016971]
+      servos:
+        parent: base_link
+        xyz: [-0.0915, 0.088175, 0.0]
+  rb:
+    cad_prefix: R2
+    side: right
+    hip_xyz: [-0.0915, -0.088175, 0.0]
+    cad_pose_m1_deg: 90.0
+    cad_pose_m2_deg: 90.0
+    fk_residual_mm: 0.290251
+    measured_canonical_mm:
+      O: [0.0, 0.0]
+      M: [-19.942, -19.967]
+      K: [77.782, -77.782]
+      C: [-36.912, -2.997]
+      D: [-16.971, 16.971]
+      A: [21.213, 21.213]
+      B: [98.995, -56.569]
+      E: [0.0, -155.563]
+    measured_lengths: {L1: 110.0, L2: 110.0, L2a: 30.0, L3: 24.0, L41: 24.0, L42: 30.0, phi: 90.0, L51: 28.22,
+      L52: 110.0, d_x: -19.942, d_y: -19.967}
+    part_hole_lengths: {fan O-D (L41): 24.0, fan O-A (L42): 30.0, 'fan D-O-A (phi, deg)': 90.0, rod M-C (L3): 24.0,
+      ab_link A-B (L52): 110.0, calf K-E (L2): 110.0, calf K-B (L2a): 30.0, cd_link C-D (L51): 28.218,
+      cd_link C vs rod C: 0.054, thigh O-K (L1): 110.0}
+    joints:
+      thigh:
+        parent: base_link
+        xyz: [-0.0915, -0.088175, 0.0]
+      calf:
+        parent: thigh
+        xyz: [-0.077782, 0.0, -0.077782]
+      foot:
+        parent: calf
+        xyz: [0.077576, 0.0, -0.077987]
+      fan:
+        parent: base_link
+        xyz: [-0.0915, -0.088175, 0.0]
+      ab_link:
+        parent: fan
+        xyz: [-0.021157, 0.0, 0.021269]
+      rod:
+        parent: base_link
+        xyz: [-0.0715, -0.088175, -0.02]
+      cd_link:
+        parent: rod
+        xyz: [0.016971, 0.0, 0.016971]
+      servos:
+        parent: base_link
+        xyz: [-0.0915, -0.088175, 0.0]
+part_alignment_deg: {left_thigh: -0.0, left_calf: 0.1512, left_foot: 0.1512, left_fan: 0.1512, left_rod: 0.0,
+  left_cd_link: 0.249, left_ab_link: 0.0, left_servos: 0.0, right_thigh: -0.0, right_calf: 0.1512, right_foot: 0.1512,
+  right_fan: 0.1512, right_rod: 0.0, right_cd_link: 0.249, right_ab_link: 0.0, right_servos: 0.0}
+meshes:
+  body: {file: body.stl, faces: 18774, bytes: 938784, tolerance_mm: 0.6554, angular_rad: 0.8, watertight: false}
+  top_cover: {file: top_cover.stl, faces: 7159, bytes: 358034, tolerance_mm: 0.1, angular_rad: 0.3, watertight: false}
+  left_thigh: {file: left_thigh.stl, faces: 2762, bytes: 138184, tolerance_mm: 0.1, angular_rad: 0.3,
+    watertight: false}
+  left_calf: {file: left_calf.stl, faces: 1106, bytes: 55384, tolerance_mm: 0.1, angular_rad: 0.3, watertight: true}
+  left_foot: {file: left_foot.stl, faces: 3959, bytes: 198034, tolerance_mm: 0.1, angular_rad: 0.3, watertight: false}
+  left_fan: {file: left_fan.stl, faces: 1140, bytes: 57084, tolerance_mm: 0.1, angular_rad: 0.3, watertight: true}
+  left_rod: {file: left_rod.stl, faces: 1474, bytes: 73784, tolerance_mm: 0.1, angular_rad: 0.3, watertight: true}
+  left_cd_link: {file: left_cd_link.stl, faces: 612, bytes: 30684, tolerance_mm: 0.1, angular_rad: 0.3,
+    watertight: true}
+  left_ab_link: {file: left_ab_link.stl, faces: 1096, bytes: 54884, tolerance_mm: 0.1, angular_rad: 0.3,
+    watertight: true}
+  left_servos: {file: left_servos.stl, faces: 4952, bytes: 247684, tolerance_mm: 0.1, angular_rad: 0.3,
+    watertight: false}
+  right_thigh: {file: right_thigh.stl, faces: 3470, bytes: 173584, tolerance_mm: 0.1, angular_rad: 0.3,
+    watertight: true}
+  right_calf: {file: right_calf.stl, faces: 1106, bytes: 55384, tolerance_mm: 0.1, angular_rad: 0.3, watertight: true}
+  right_foot: {file: right_foot.stl, faces: 3957, bytes: 197934, tolerance_mm: 0.1, angular_rad: 0.3,
+    watertight: false}
+  right_fan: {file: right_fan.stl, faces: 1140, bytes: 57084, tolerance_mm: 0.1, angular_rad: 0.3, watertight: true}
+  right_rod: {file: right_rod.stl, faces: 1474, bytes: 73784, tolerance_mm: 0.1, angular_rad: 0.3, watertight: true}
+  right_cd_link: {file: right_cd_link.stl, faces: 612, bytes: 30684, tolerance_mm: 0.1, angular_rad: 0.3,
+    watertight: true}
+  right_ab_link: {file: right_ab_link.stl, faces: 1096, bytes: 54884, tolerance_mm: 0.1, angular_rad: 0.3,
+    watertight: true}
+  right_servos: {file: right_servos.stl, faces: 4952, bytes: 247684, tolerance_mm: 0.1, angular_rad: 0.3,
+    watertight: false}
+inertials:
+  body:
+    link: base_link
+    material: fdm
+    volume_m3: 0.0003997392
+    com: [0.01062, -6.9e-05, -0.028389]
+    inertia_per_density: {ixx: 6.280868e-07, iyy: 2.981227e-06, izz: 3.452223e-06, ixy: 3.073278e-09,
+      ixz: -1.447718e-09, iyz: -6.167091e-11}
+  top_cover:
+    link: base_link
+    material: fdm
+    volume_m3: 0.0001157249
+    com: [0.017609, -6.6e-05, 0.019962]
+    inertia_per_density: {ixx: 5.290668e-08, iyy: 5.725445e-07, izz: 6.191373e-07, ixy: 6.13871e-11, ixz: -8.244057e-09,
+      iyz: 5.90635e-11}
+  left_thigh:
+    link: thigh
+    material: sla
+    volume_m3: 3.539949e-05
+    com: [-0.031947, 4.1e-05, -0.027861]
+    inertia_per_density: {ixx: 2.470817e-08, iyy: 4.860994e-08, izz: 2.667242e-08, ixy: -1.433204e-10,
+      ixz: -2.323331e-08, iyz: -1.344066e-10}
+  left_calf:
+    link: calf
+    material: fdm
+    volume_m3: 1.301806e-05
+    com: [0.039651, -7.1e-05, -0.036466]
+    inertia_per_density: {ixx: 1.399775e-08, iyy: 2.804471e-08, izz: 1.413253e-08, ixy: -5.609454e-11,
+      ixz: 1.368417e-08, iyz: 5.32597e-11}
+  left_foot:
+    link: foot
+    material: tpu
+    volume_m3: 1.002335e-05
+    com: [0.002704, 0.0, -0.002818]
+    inertia_per_density: {ixx: 9.879519e-10, iyy: 1.206903e-09, izz: 1.004282e-09, ixy: -9.047022e-15,
+      ixz: -1.353767e-10, iyz: -2.100719e-15}
+  left_fan:
+    link: fan
+    material: fdm
+    volume_m3: 5.272213e-06
+    com: [-0.001771, -0.014295, 0.014462]
+    inertia_per_density: {ixx: 5.950661e-10, iyy: 1.257313e-09, izz: 6.869935e-10, ixy: 4.682862e-14,
+      ixz: 8.087457e-11, iyz: -7.225991e-13}
+  left_rod:
+    link: rod
+    material: sla
+    volume_m3: 1.490337e-06
+    com: [0.00408, -0.011104, 0.00408]
+    inertia_per_density: {ixx: 7.2663e-11, iyy: 1.372964e-10, izz: 7.266256e-11, ixy: -3.820496e-12, ixz: -5.111637e-11,
+      iyz: -3.820578e-12}
+  left_cd_link:
+    link: cd_link
+    material: fdm
+    volume_m3: 2.200238e-06
+    com: [-0.010322, -0.006869, 0.010186]
+    inertia_per_density: {ixx: 1.303884e-10, iyy: 2.387134e-10, izz: 1.275971e-10, ixy: -1.223916e-11,
+      ixz: 1.009242e-10, iyz: 1.240958e-11}
+  left_ab_link:
+    link: ab_link
+    material: fdm
+    volume_m3: 3.959343e-06
+    com: [-0.038602, -0.008576, -0.038602]
+    inertia_per_density: {ixx: 2.339725e-09, iyy: 4.665243e-09, izz: 2.339725e-09, ixy: 9.313226e-25,
+      ixz: -2.314778e-09, iyz: -5.984135e-36}
+  left_servos:
+    link: servos
+    material: servo
+    volume_m3: 6.663921e-05
+    com: [0.00995, -0.03702, -0.01]
+    inertia_per_density: {ixx: 1.813801e-08, iyy: 1.81974e-08, izz: 1.864918e-08, ixy: 3.779307e-21, ixz: 7.175606e-11,
+      iyz: -3.490597e-21}
+  right_thigh:
+    link: thigh
+    material: sla
+    volume_m3: 3.794915e-05
+    com: [-0.030236, 0.000479, -0.026308]
+    inertia_per_density: {ixx: 2.62959e-08, iyy: 5.168832e-08, izz: 2.859182e-08, ixy: -3.752688e-10,
+      ixz: -2.473098e-08, iyz: -3.29095e-10}
+  right_calf:
+    link: calf
+    material: fdm
+    volume_m3: 1.301806e-05
+    com: [0.039651, 7.1e-05, -0.036466]
+    inertia_per_density: {ixx: 1.399775e-08, iyy: 2.804471e-08, izz: 1.413253e-08, ixy: 5.609454e-11,
+      ixz: 1.368417e-08, iyz: -5.32597e-11}
+  right_foot:
+    link: foot
+    material: tpu
+    volume_m3: 1.002333e-05
+    com: [0.002704, -0.0, -0.002818]
+    inertia_per_density: {ixx: 9.879493e-10, iyy: 1.206902e-09, izz: 1.004281e-09, ixy: 9.163838e-15,
+      ixz: -1.35377e-10, iyz: 1.286003e-15}
+  right_fan:
+    link: fan
+    material: fdm
+    volume_m3: 5.272213e-06
+    com: [-0.001771, 0.014295, 0.014462]
+    inertia_per_density: {ixx: 5.950661e-10, iyy: 1.257313e-09, izz: 6.869935e-10, ixy: -4.682862e-14,
+      ixz: 8.087457e-11, iyz: 7.225991e-13}
+  right_rod:
+    link: rod
+    material: sla
+    volume_m3: 1.490337e-06
+    com: [0.00408, 0.011704, 0.00408]
+    inertia_per_density: {ixx: 7.2663e-11, iyy: 1.372964e-10, izz: 7.266256e-11, ixy: 3.820496e-12, ixz: -5.111637e-11,
+      iyz: 3.820578e-12}
+  right_cd_link:
+    link: cd_link
+    material: fdm
+    volume_m3: 2.200238e-06
+    com: [-0.010322, 0.006869, 0.010186]
+    inertia_per_density: {ixx: 1.303884e-10, iyy: 2.387134e-10, izz: 1.275971e-10, ixy: 1.223916e-11,
+      ixz: 1.009242e-10, iyz: -1.240958e-11}
+  right_ab_link:
+    link: ab_link
+    material: fdm
+    volume_m3: 3.959343e-06
+    com: [-0.038602, 0.008576, -0.038602]
+    inertia_per_density: {ixx: 2.339725e-09, iyy: 4.665243e-09, izz: 2.339725e-09, ixy: 1.197312e-35,
+      ixz: -2.314778e-09, iyz: 1.862645e-24}
+  right_servos:
+    link: servos
+    material: servo
+    volume_m3: 6.663921e-05
+    com: [0.00995, 0.03702, -0.01]
+    inertia_per_density: {ixx: 1.813801e-08, iyy: 1.81974e-08, izz: 1.864918e-08, ixy: -4.887581e-21,
+      ixz: 7.175606e-11, iyz: 3.278255e-21}
+collisions:
+  left_thigh:
+    type: capsule
+    p0: [-0.0, 0.0, 0.0]
+    p1: [-0.077782, 0.0, -0.077782]
+    radius: 0.009388
+    cyl_xyz: [-0.038891, 0.0, -0.038891]
+    cyl_length: 0.11
+    cyl_rpy: [0.0, -2.356194, 0.0]
+  left_calf:
+    type: capsule
+    p0: [-0.0, 0.0, 0.0]
+    p1: [0.077576, 0.0, -0.077987]
+    radius: 0.008896
+    cyl_xyz: [0.038788, 0.0, -0.038993]
+    cyl_length: 0.11
+    cyl_rpy: [0.0, 2.358833, 0.0]
+  left_ab_link:
+    type: capsule
+    p0: [-0.0, 0.0, 0.0]
+    p1: [-0.077782, 0.0, -0.077782]
+    radius: 0.003493
+    cyl_xyz: [-0.038891, 0.0, -0.038891]
+    cyl_length: 0.11
+    cyl_rpy: [0.0, -2.356194, 0.0]
+  right_thigh:
+    type: capsule
+    p0: [-0.0, 0.0, 0.0]
+    p1: [-0.077782, 0.0, -0.077782]
+    radius: 0.009868
+    cyl_xyz: [-0.038891, 0.0, -0.038891]
+    cyl_length: 0.11
+    cyl_rpy: [0.0, -2.356194, 0.0]
+  right_calf:
+    type: capsule
+    p0: [-0.0, 0.0, 0.0]
+    p1: [0.077576, 0.0, -0.077987]
+    radius: 0.008903
+    cyl_xyz: [0.038788, 0.0, -0.038993]
+    cyl_length: 0.11
+    cyl_rpy: [0.0, 2.358833, 0.0]
+  right_ab_link:
+    type: capsule
+    p0: [-0.0, 0.0, 0.0]
+    p1: [-0.077782, 0.0, -0.077782]
+    radius: 0.003496
+    cyl_xyz: [-0.038891, 0.0, -0.038891]
+    cyl_length: 0.11
+    cyl_rpy: [0.0, -2.356194, 0.0]
+  left_foot:
+    type: sphere
+    center: [0.0, 0.0, 0.0]
+    radius: 0.017496
+  right_foot:
+    type: sphere
+    center: [0.0, 0.0, 0.0]
+    radius: 0.017496
+  base:
+    type: box
+    center: [0.009946, -0.0, -0.001267]
+    size: [0.253867, 0.153, 0.078615]
+foot:
+  left:
+    radius: 0.017496
+    min_over_pm40deg: 0.01749
+    max_over_pm40deg: 0.0175
+    max_inplane: 0.0175
+    lateral_extent: [-0.012247, 0.012247]
+  right:
+    radius: 0.017496
+    min_over_pm40deg: 0.01749
+    max_over_pm40deg: 0.0175
+    max_inplane: 0.0175
+    lateral_extent: [-0.012247, 0.012247]
+body_box:
+  lo: [-0.116988, -0.063538, -0.040575]
+  hi: [0.13688, 0.063462, 0.020675]

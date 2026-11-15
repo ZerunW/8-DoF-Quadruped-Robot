@@ -1,0 +1,485 @@
+{
+  "configById": {
+    "3D!robotdog": {
+      "foxglovePanelTitle": "Robot dog (URDF from /robot_description)",
+      "followTf": "base_link",
+      "fixedFrame": "odom",
+      "followMode": "follow-heading",
+      "scene": {
+        "backgroundColor": "#dfe4ea",
+        "meshUpAxis": "z_up",
+        "labelScaleFactor": 0.2,
+        "transforms": {
+          "visible": false,
+          "showLabel": false,
+          "axisSize": 0.03
+        }
+      },
+      "cameraState": {
+        "perspective": true,
+        "distance": 0.9,
+        "phi": 62,
+        "thetaOffset": -135,
+        "targetOffset": [
+          0,
+          0,
+          0
+        ],
+        "fovy": 45,
+        "near": 0.01,
+        "far": 100,
+        "logDepth": false
+      },
+      "transforms": {},
+      "topics": {
+        "/robot_description": {
+          "visible": false
+        },
+        "/estimate/robot_description": {
+          "visible": false
+        }
+      },
+      "layers": {
+        "a1f3c2d4-grid-odom": {
+          "visible": true,
+          "frameLocked": true,
+          "label": "Grid (odom, 10 cm)",
+          "instanceId": "a1f3c2d4-grid-odom",
+          "layerId": "foxglove.Grid",
+          "frameId": "odom",
+          "size": 4,
+          "divisions": 40,
+          "lineWidth": 1,
+          "color": "#7f8c9a",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "order": 1
+        },
+        "b7e2a9c1-urdf-robot": {
+          "visible": true,
+          "frameLocked": true,
+          "label": "Robot dog (/robot_description)",
+          "instanceId": "b7e2a9c1-urdf-robot",
+          "layerId": "foxglove.Urdf",
+          "sourceType": "topic",
+          "url": "",
+          "filePath": "",
+          "parameter": "",
+          "topic": "/robot_description",
+          "framePrefix": "",
+          "controlMode": "transforms",
+          "jointStatesTopic": "",
+          "displayMode": "auto",
+          "fallbackColor": "#ffffff",
+          "showAxis": false,
+          "axisScale": 1,
+          "showOutlines": true,
+          "opacity": 1,
+          "order": 2
+        },
+        "c4d8e6f2-urdf-estimate": {
+          "visible": false,
+          "frameLocked": true,
+          "label": "Servo-state model (sim: estimate/)",
+          "instanceId": "c4d8e6f2-urdf-estimate",
+          "layerId": "foxglove.Urdf",
+          "sourceType": "topic",
+          "url": "",
+          "filePath": "",
+          "parameter": "",
+          "topic": "/estimate/robot_description",
+          "framePrefix": "estimate/",
+          "controlMode": "transforms",
+          "jointStatesTopic": "",
+          "displayMode": "auto",
+          "fallbackColor": "#9fd3ff",
+          "showAxis": false,
+          "axisScale": 1,
+          "showOutlines": false,
+          "opacity": 0.35,
+          "order": 3
+        }
+      }
+    },
+    "Plot!attitude": {
+      "foxglovePanelTitle": "Attitude, IMU (deg)",
+      "paths": [
+        {
+          "value": "/bno055/imu.orientation.@rpy.roll.@degrees",
+          "enabled": true,
+          "label": "roll (+ right side down)",
+          "timestampMethod": "receiveTime",
+          "color": "#4e98e2"
+        },
+        {
+          "value": "/bno055/imu.orientation.@rpy.pitch.@degrees",
+          "enabled": true,
+          "label": "pitch (+ nose down)",
+          "timestampMethod": "receiveTime",
+          "color": "#f5774d"
+        },
+        {
+          "value": "/bno055/imu.orientation.@rpy.yaw.@degrees",
+          "enabled": true,
+          "label": "yaw (+ left)",
+          "timestampMethod": "receiveTime",
+          "color": "#61cbff",
+          "yAxisId": "yaw"
+        }
+      ],
+      "xAxisVal": "timestamp",
+      "timeWindowMode": "sliding",
+      "followingViewWidth": 30,
+      "showLegend": true,
+      "legendDisplay": "floating",
+      "floatingLegendPosition": "top-left",
+      "showPlotValuesInLegend": true,
+      "showXAxisLabels": true,
+      "showYAxisLabels": true,
+      "isSynced": true,
+      "yAxisLabel": "deg",
+      "secondaryAxes": [
+        {
+          "id": "yaw",
+          "label": "yaw (deg)"
+        }
+      ]
+    },
+    "Plot!leveling": {
+      "foxglovePanelTitle": "Leveling / heading hold (/gait/debug)",
+      "paths": [
+        {
+          "value": "/gait/debug.data[7]",
+          "enabled": true,
+          "label": "u_roll (deg)",
+          "timestampMethod": "receiveTime",
+          "color": "#4e98e2"
+        },
+        {
+          "value": "/gait/debug.data[8]",
+          "enabled": true,
+          "label": "u_pitch (deg)",
+          "timestampMethod": "receiveTime",
+          "color": "#f5774d"
+        },
+        {
+          "value": "/gait/debug.data[10]",
+          "enabled": true,
+          "label": "i_roll (deg)",
+          "timestampMethod": "receiveTime",
+          "color": "#4e98e2",
+          "lineStyle": "dashed"
+        },
+        {
+          "value": "/gait/debug.data[11]",
+          "enabled": true,
+          "label": "i_pitch (deg)",
+          "timestampMethod": "receiveTime",
+          "color": "#f5774d",
+          "lineStyle": "dashed"
+        },
+        {
+          "value": "/gait/debug.data[9]",
+          "enabled": true,
+          "label": "u_yaw (rad/s)",
+          "timestampMethod": "receiveTime",
+          "color": "#d47ee8",
+          "yAxisId": "rate"
+        },
+        {
+          "value": "/gait/debug.data[14]",
+          "enabled": true,
+          "label": "level_active",
+          "timestampMethod": "receiveTime",
+          "color": "#9e9e9e",
+          "yAxisId": "rate",
+          "lineStyle": "dotted"
+        },
+        {
+          "value": "/gait/debug.data[15]",
+          "enabled": true,
+          "label": "heading_active",
+          "timestampMethod": "receiveTime",
+          "color": "#4cc38a",
+          "yAxisId": "rate",
+          "lineStyle": "dotted"
+        }
+      ],
+      "xAxisVal": "timestamp",
+      "timeWindowMode": "sliding",
+      "followingViewWidth": 30,
+      "showLegend": true,
+      "legendDisplay": "floating",
+      "floatingLegendPosition": "top-left",
+      "showPlotValuesInLegend": true,
+      "showXAxisLabels": true,
+      "showYAxisLabels": true,
+      "isSynced": true,
+      "yAxisLabel": "mm",
+      "secondaryAxes": [
+        {
+          "id": "rate",
+          "label": "rad/s, flags"
+        }
+      ]
+    },
+    "Plot!feet": {
+      "foxglovePanelTitle": "Foot heights fz (mm, /gait/debug)",
+      "paths": [
+        {
+          "value": "/gait/debug.data[19]",
+          "enabled": true,
+          "label": "lf_fz",
+          "timestampMethod": "receiveTime",
+          "color": "#4e98e2"
+        },
+        {
+          "value": "/gait/debug.data[24]",
+          "enabled": true,
+          "label": "rf_fz",
+          "timestampMethod": "receiveTime",
+          "color": "#f5774d"
+        },
+        {
+          "value": "/gait/debug.data[29]",
+          "enabled": true,
+          "label": "lb_fz",
+          "timestampMethod": "receiveTime",
+          "color": "#61cbff"
+        },
+        {
+          "value": "/gait/debug.data[34]",
+          "enabled": true,
+          "label": "rb_fz",
+          "timestampMethod": "receiveTime",
+          "color": "#b6d36b"
+        }
+      ],
+      "xAxisVal": "timestamp",
+      "timeWindowMode": "sliding",
+      "followingViewWidth": 30,
+      "showLegend": true,
+      "legendDisplay": "floating",
+      "floatingLegendPosition": "top-left",
+      "showPlotValuesInLegend": true,
+      "showXAxisLabels": true,
+      "showYAxisLabels": true,
+      "isSynced": true,
+      "yAxisLabel": "mm"
+    },
+    "Plot!height": {
+      "foxglovePanelTitle": "Height",
+      "paths": [
+        {
+          "value": "/sim/ground_truth.pose.pose.position.z",
+          "enabled": true,
+          "label": "sim: hip height (m)",
+          "timestampMethod": "receiveTime",
+          "color": "#b6d36b"
+        },
+        {
+          "value": "/gait/debug.data[12]",
+          "enabled": true,
+          "label": "kin_height_mm",
+          "timestampMethod": "receiveTime",
+          "color": "#f5774d",
+          "yAxisId": "mm"
+        }
+      ],
+      "xAxisVal": "timestamp",
+      "timeWindowMode": "sliding",
+      "followingViewWidth": 30,
+      "showLegend": true,
+      "legendDisplay": "floating",
+      "floatingLegendPosition": "top-left",
+      "showPlotValuesInLegend": true,
+      "showXAxisLabels": true,
+      "showYAxisLabels": true,
+      "isSynced": true,
+      "yAxisLabel": "m",
+      "secondaryAxes": [
+        {
+          "id": "mm",
+          "label": "mm"
+        }
+      ]
+    },
+    "Plot!progress": {
+      "foxglovePanelTitle": "Walking: command vs. sim ground truth",
+      "paths": [
+        {
+          "value": "/cmd_vel.linear.x",
+          "enabled": true,
+          "label": "cmd_vel x (m/s)",
+          "timestampMethod": "receiveTime",
+          "color": "#4e98e2",
+          "yAxisId": "vel"
+        },
+        {
+          "value": "/gait/debug.data[2]",
+          "enabled": true,
+          "label": "v_cmd (m/s)",
+          "timestampMethod": "receiveTime",
+          "color": "#61cbff",
+          "yAxisId": "vel",
+          "lineStyle": "dashed"
+        },
+        {
+          "value": "/sim/ground_truth.twist.twist.linear.x",
+          "enabled": true,
+          "label": "sim: body vx (m/s)",
+          "timestampMethod": "receiveTime",
+          "color": "#b6d36b",
+          "yAxisId": "vel"
+        },
+        {
+          "value": "/sim/ground_truth.pose.pose.position.x",
+          "enabled": true,
+          "label": "sim: x (m)",
+          "timestampMethod": "receiveTime",
+          "color": "#f5774d"
+        },
+        {
+          "value": "/sim/ground_truth.pose.pose.position.y",
+          "enabled": true,
+          "label": "sim: y (m)",
+          "timestampMethod": "receiveTime",
+          "color": "#d47ee8"
+        }
+      ],
+      "xAxisVal": "timestamp",
+      "timeWindowMode": "sliding",
+      "followingViewWidth": 30,
+      "showLegend": true,
+      "legendDisplay": "floating",
+      "floatingLegendPosition": "top-left",
+      "showPlotValuesInLegend": true,
+      "showXAxisLabels": true,
+      "showYAxisLabels": true,
+      "isSynced": true,
+      "yAxisLabel": "m",
+      "secondaryAxes": [
+        {
+          "id": "vel",
+          "label": "m/s"
+        }
+      ]
+    },
+    "Plot!servos": {
+      "foxglovePanelTitle": "/servo_state (servo deg)",
+      "paths": [
+        {
+          "value": "/servo_state.position[0]",
+          "enabled": true,
+          "label": "left_front_bottom",
+          "timestampMethod": "receiveTime",
+          "color": "#4e98e2"
+        },
+        {
+          "value": "/servo_state.position[1]",
+          "enabled": true,
+          "label": "left_front_top",
+          "timestampMethod": "receiveTime",
+          "color": "#f5774d"
+        },
+        {
+          "value": "/servo_state.position[2]",
+          "enabled": true,
+          "label": "left_back_bottom",
+          "timestampMethod": "receiveTime",
+          "color": "#61cbff"
+        },
+        {
+          "value": "/servo_state.position[3]",
+          "enabled": true,
+          "label": "left_back_top",
+          "timestampMethod": "receiveTime",
+          "color": "#b6d36b"
+        },
+        {
+          "value": "/servo_state.position[4]",
+          "enabled": true,
+          "label": "right_front_bottom",
+          "timestampMethod": "receiveTime",
+          "color": "#d47ee8"
+        },
+        {
+          "value": "/servo_state.position[5]",
+          "enabled": true,
+          "label": "right_front_top",
+          "timestampMethod": "receiveTime",
+          "color": "#e8c547"
+        },
+        {
+          "value": "/servo_state.position[6]",
+          "enabled": true,
+          "label": "right_back_bottom",
+          "timestampMethod": "receiveTime",
+          "color": "#9e9e9e"
+        },
+        {
+          "value": "/servo_state.position[7]",
+          "enabled": true,
+          "label": "right_back_top",
+          "timestampMethod": "receiveTime",
+          "color": "#4cc38a"
+        }
+      ],
+      "xAxisVal": "timestamp",
+      "timeWindowMode": "sliding",
+      "followingViewWidth": 30,
+      "showLegend": true,
+      "legendDisplay": "floating",
+      "floatingLegendPosition": "top-left",
+      "showPlotValuesInLegend": true,
+      "showXAxisLabels": true,
+      "showYAxisLabels": true,
+      "isSynced": true,
+      "yAxisLabel": "deg"
+    }
+  },
+  "globalVariables": {},
+  "userNodes": {},
+  "playbackConfig": {
+    "speed": 1.0
+  },
+  "layout": {
+    "direction": "row",
+    "first": "3D!robotdog",
+    "second": {
+      "direction": "row",
+      "first": {
+        "direction": "column",
+        "first": "Plot!attitude",
+        "second": {
+          "direction": "column",
+          "first": "Plot!leveling",
+          "second": "Plot!feet",
+          "splitPercentage": 50
+        },
+        "splitPercentage": 33
+      },
+      "second": {
+        "direction": "column",
+        "first": "Plot!height",
+        "second": {
+          "direction": "column",
+          "first": "Plot!progress",
+          "second": "Plot!servos",
+          "splitPercentage": 50
+        },
+        "splitPercentage": 33
+      },
+      "splitPercentage": 50
+    },
+    "splitPercentage": 45
+  }
+}
