@@ -1,26 +1,86 @@
-# 8-DoF Quadruped Robot
+<div align="center">
+    <img src="ros2_ws/src/robot_dog_description/doc/stand_pose.png" alt="Robot standing" width="480">
+    <h1>8-DoF Quadruped Robot</h1>
+</div>
 
-A 3D-printed 8-DoF quadruped robot that walks dynamically using IMU-based balance control,
-inverse kinematics and coordinated gait generation.
+<p align="center">
+    <em>A 3D-printed quadruped that trots with IMU leveling, heading hold and a MuJoCo twin.</em>
+</p>
 
-![Stand pose](ros2_ws/src/robot_dog_description/doc/stand_pose.png)
+<p align="center">
+    <a href="https://github.com/ZerunW/8-DoF-Quadruped-Robot/actions/workflows/lint.yml"><img src="https://img.shields.io/github/actions/workflow/status/ZerunW/8-DoF-Quadruped-Robot/lint.yml?branch=main&style=flat-square&label=lint" alt="Lint status" /></a>
+    <img src="https://img.shields.io/badge/ROS%202-Humble-22314E?style=flat-square" alt="ROS 2 Humble" />
+    <img src="https://img.shields.io/badge/Raspberry%20Pi-5-C51A4A?style=flat-square&logo=raspberrypi&logoColor=white" alt="Raspberry Pi 5" />
+    <img src="https://img.shields.io/badge/MuJoCo-3.16-0A84FF?style=flat-square" alt="MuJoCo" />
+    <img src="https://img.shields.io/badge/python-3.12-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python 3.12" />
+    <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-A855F7?style=flat-square" alt="License: MIT" /></a>
+</p>
 
-## The robot
+## What is this?
 
-- **Legs**: four planar five-bar linkages, each driven by two Feetech FT6335 360° servos at
-  the hip. The knees point backward, and the feet are TPU spheres.
-- **Electronics**: Raspberry Pi 5, PCA9685 servo driver and BNO055 IMU on I2C.
-- **Size**: hips 183 mm apart front to back and 176 mm side to side, 155 mm standing hip
-  height, about 1.4 kg without the battery.
+A quadruped robot with eight actuated joints: each leg is a planar five-bar linkage driven by
+two hip servos. The repository holds the ROS 2 software that runs it (servo driver, forward
+and inverse kinematics, gait generator, IMU balance controller, safety layers, gamepad and
+Python control), a MuJoCo simulation built from the same CAD, and the mechanical and
+electronics folders. The controller and servo driver run unchanged on the robot's Raspberry
+Pi 5 and in simulation.
 
-## What it can do
+## Why?
 
-- Trot forward and backward, and turn in place or while walking
-- Hold its heading with the IMU
-- Keep the body level on slopes
-- Change body height and lean while standing or walking
-- Be driven by a PS5 gamepad or scripted through a Python API
-- Run the same software in a MuJoCo simulation
+Eight servos and a five-bar leg are cheap to build and print, but they leave little margin:
+the front and rear legs of a side can collide, and a bad command can drive a linkage past its
+limits. The software therefore checks every pose it can plan at startup, guards leg pairs on
+every tick, and clamps and rate-limits at the servo driver. Simulation with the real driver
+in the loop lets you try gaits and disturbances before the robot touches the ground. An RL
+policy is planned on top of this (see [Roadmap](#roadmap)).
+
+## Quick start
+
+Simulation on a laptop (linux-64) needs only [Pixi](https://pixi.sh):
+
+```bash
+cd ros2_ws
+pixi install && pixi run build
+pixi run launch_sim            # headless; Foxglove bridge on ws://localhost:8765
+```
+
+In a second shell:
+
+```bash
+pixi run walk_test -- --speed 0.08 --duration 5
+pixi run sim_push -- --fy 3 --duration 0.2
+```
+
+Use `pixi run launch_sim_viewer` for the MuJoCo window. For the robot, see
+[Running on the robot](#running-on-the-robot).
+
+## Features
+
+- **Kinematics** — exact forward kinematics of the five-bar leg and Gauss-Newton IK, restricted to a joint region computed from the CAD
+- **Gaits as data** — phase offsets, duty, period and Bezier swing per preset; the commanded speed selects the gait
+- **Balance** — IMU roll/pitch leveling on slopes and IMU heading hold while walking
+- **Body pose** — height, pitch and roll as one rigid transform, clamped to validated limits
+- **Safety** — startup check of every plannable pose, per-tick front/rear leg collision guard, servo driver with hard clamp, rate limiter and watchdog
+- **Control interfaces** — Python behavior API, PS5 DualSense teleoperation, plain ROS topics
+- **Simulation** — MuJoCo model of the full CAD with adjustable ground tilt, payload, servo gains and IMU noise
+- **Tooling** — Pixi workspace on `robostack-humble` (no system ROS), and a deploy terminal that syncs and runs tasks on the Pi
+
+## Hardware
+
+| Part | Detail |
+|---|---|
+| Computer | Raspberry Pi 5, Ubuntu 24.04 |
+| Servos | 8 x Feetech FT6335, 360 degrees, PWM 500-2500 us |
+| Servo driver | PCA9685, I2C bus 1, address 0x40, 50 Hz |
+| IMU | BNO055, I2C bus 1, address 0x28, IMUPLUS mode |
+| Gamepad (optional) | PS5 DualSense over Bluetooth |
+| Feet | TPU spheres, 17.5 mm radius |
+
+The robot weighs about 1.4 kg without the battery. The PCA9685 and BNO055 are powered from the
+servo rail, so they only appear on I2C while motor power is on. Wiring, servo channels and IMU
+mount are in [ros2_ws/docs/hardware.md](ros2_ws/docs/hardware.md). The [`cad/`](cad) and
+[`pcb/`](pcb) folders are placeholders for now; the meshes used by the software are in
+`ros2_ws/src/robot_dog_description/meshes/`.
 
 ## Results
 
@@ -46,29 +106,91 @@ inverse kinematics and coordinated gait generation.
 | 4 N side push for 0.2 s | 1.8° peak roll, back within 1° in 0.2 s |
 | Body pose | push-ups 175 ↔ 130 mm, leans of 10° pitch and 8° roll |
 
-## Repository
+## Running on the robot
 
-| Folder | |
-|---|---|
-| [`ros2_ws/`](ros2_ws) | ROS 2 Humble control software and MuJoCo simulation |
-| [`cad/`](cad) | mechanical design |
-| [`pcb/`](pcb) | electronics |
+The laptop holds the workspace. The deploy terminal syncs it to the Pi with rsync and runs
+Pixi tasks there over SSH. On the Pi, install Pixi (linux-aarch64), enable I2C and add your
+user to the `i2c` group.
 
-## Software
-
-Hardware drivers, kinematics, gait generation, balance control, safety layers, calibration
-tools and the simulation are all in [`ros2_ws/`](ros2_ws). The setup uses
-[Pixi](https://pixi.sh), so no system ROS install is needed.
-
-```bash
-cd ros2_ws
-pixi install && pixi run build
-pixi run launch_sim          # simulation on a laptop
+```text
+cd ros2_ws && pixi run deploy
+robotdog> config                    # host, user, deploy directory, SSH key
+robotdog> pixi run build
+robotdog> pixi run launch_driver    # servo driver only, holds the stand pose
+robotdog> pixi run launch_bringup   # full stack: stands up and levels
+robotdog> pixi run walk_test -- --speed 0.05 --duration 5
 ```
 
-To run on the robot, see [ros2_ws/README.md](ros2_ws/README.md#running-on-the-robot) and
-the [bring-up guide](ros2_ws/docs/bringup.md).
+Calibrate servo offsets and the IMU level on first power-up with `servo_tune`, `leg_test`,
+`imu_check` and `calib_offsets`. The procedure is in
+[ros2_ws/docs/bringup.md](ros2_ws/docs/bringup.md). With a gamepad, run
+`pixi run launch_bringup teleop:=true` (L1 is the deadman, Cross is emergency stop). Stop
+with `pixi run stand`; turn the servos off with `pixi run relax`.
+
+Control from Python:
+
+```python
+from robot_dog_control.api import RobotDog
+
+dog = RobotDog()
+dog.walk(height=155, heading=0, speed=0.08, duration=5)   # mm, deg, m/s, s
+dog.set_lean(pitch_deg=10, roll_deg=0)
+dog.close()
+```
+
+## How it works
+
+```text
+BNO055 IMU ----------------------------+
+ /bno055/imu                           v
+gamepad / API / topics -->  gait_controller (50 Hz)
+ /cmd_vel /cmd_step          1. gait planner: foot paths per leg
+ /cmd_pose /cmd_heading      2. body pose: height, pitch, roll
+                             3. leveling PID + heading hold (IMU)
+                             4. inverse kinematics in the joint region
+                             5. leg pair collision guard
+                                   | /servo_cmd
+                                   v
+                             servo_driver: clamp, rate limit, watchdog
+                                   v
+                             PCA9685 --> 8 servos
+```
+
+The controller core (`GaitControllerCore`) has no ROS dependency, which is how the tests and
+the simulation drive it. In simulation the `sim` node replaces the IMU and feeds the driver's
+`/servo_state` into the MuJoCo hinges. Details are in
+[ros2_ws/docs/control.md](ros2_ws/docs/control.md) and [docs/](docs/README.md).
+
+## Repository
+
+| Path | Contents |
+|---|---|
+| [`ros2_ws/`](ros2_ws) | ROS 2 Humble packages, Pixi workspace, deploy terminal |
+| [`ros2_ws/src/robot_dog_control`](ros2_ws/src/robot_dog_control) | kinematics, gait, pose, controller node, behavior API, gamepad, calibration tools |
+| [`ros2_ws/src/robot_dog_hw`](ros2_ws/src/robot_dog_hw) | PCA9685 servo driver, IMU supervisor, servo tools |
+| [`ros2_ws/src/robot_dog_bringup`](ros2_ws/src/robot_dog_bringup) | launch files and `config/robot_dog.yaml`, the only configuration file |
+| [`ros2_ws/src/robot_dog_description`](ros2_ws/src/robot_dog_description) | URDF, meshes, leg collision data, Foxglove layout |
+| [`ros2_ws/src/robot_dog_sim`](ros2_ws/src/robot_dog_sim) | MuJoCo model and simulation node |
+| [`ros2_ws/src/ext/smbus_compat`](ros2_ws/src/ext/smbus_compat) | `smbus` shim over `smbus2` for the BNO055 driver |
+| [`cad/`](cad), [`pcb/`](pcb) | mechanical and electronics design (placeholders) |
+| [`docs/`](docs/README.md) | documentation index |
+
+## Roadmap
+
+- Reinforcement-learning locomotion policy, trained in the MuJoCo simulation and run through the existing controller and safety layers
+- Mechanical and electronics source files in `cad/` and `pcb/`
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Acknowledgments
+
+[MuJoCo](https://mujoco.org), [ROS 2](https://docs.ros.org/en/humble/) and
+[RoboStack](https://robostack.github.io), [Pixi](https://pixi.sh),
+[`bno055`](https://github.com/flynneva/bno055) ROS driver, [smbus2](https://github.com/kplindegaard/smbus2),
+and [Foxglove](https://foxglove.dev) for visualization.
 
 ## License
 
-[MIT](LICENSE)
+[MIT](LICENSE) © [Zerun Wang](https://github.com/ZerunW)
