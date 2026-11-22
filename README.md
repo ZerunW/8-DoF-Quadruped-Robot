@@ -71,16 +71,16 @@ Use `pixi run launch_sim_viewer` for the MuJoCo window. For the robot, see
 |---|---|
 | Computer | Raspberry Pi 5, Ubuntu 24.04 |
 | Servos | 8 x Feetech FT6335, 360 degrees, PWM 500-2500 us |
-| Servo driver | PCA9685, I2C bus 1, address 0x40, 50 Hz |
+| Servo driver | PCA9685 on the servo shield in [`pcb/`](pcb), I2C bus 1, address 0x40, 50 Hz |
 | IMU | BNO055, I2C bus 1, address 0x28, IMUPLUS mode |
 | Gamepad (optional) | PS5 DualSense over Bluetooth |
 | Feet | TPU spheres, 17.5 mm radius |
 
 The robot weighs about 1.4 kg without the battery. The PCA9685 and BNO055 are powered from the
 servo rail, so they only appear on I2C while motor power is on. Wiring, servo channels and IMU
-mount are in [ros2_ws/docs/hardware.md](ros2_ws/docs/hardware.md). The [`cad/`](cad) and
-[`pcb/`](pcb) folders are placeholders for now; the meshes used by the software are in
-`ros2_ws/src/robot_dog_description/meshes/`.
+mount are in [ros2_ws/docs/hardware.md](ros2_ws/docs/hardware.md). STEP files of the printed
+parts are in [`cad/`](cad), and the servo shield (schematic, layout, BOM) is in [`pcb/`](pcb).
+The meshes used by the software are in `ros2_ws/src/robot_dog_description/meshes/`.
 
 ## Results
 
@@ -171,13 +171,13 @@ a thin wrapper around it. In simulation the `sim` node replaces the IMU and feed
 | [`ros2_ws/src/robot_dog_description`](ros2_ws/src/robot_dog_description) | URDF, meshes, leg collision data, Foxglove layout |
 | [`ros2_ws/src/robot_dog_sim`](ros2_ws/src/robot_dog_sim) | MuJoCo model and simulation node |
 | [`ros2_ws/src/ext/smbus_compat`](ros2_ws/src/ext/smbus_compat) | `smbus` shim over `smbus2` for the BNO055 driver |
-| [`cad/`](cad), [`pcb/`](pcb) | mechanical and electronics design (placeholders) |
+| [`cad/`](cad), [`pcb/`](pcb) | STEP files of the printed parts; servo shield schematic, layout and BOM |
 | [`docs/`](docs/README.md) | documentation index |
 
 ## Roadmap
 
 - Reinforcement-learning locomotion policy, trained in the MuJoCo simulation and run through the existing controller and safety layers
-- Mechanical and electronics source files in `cad/` and `pcb/`
+- Gerber, drill and PDF schematic exports of the servo shield in `pcb/`
 
 ## Contributing
 

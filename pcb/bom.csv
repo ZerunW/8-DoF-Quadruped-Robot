@@ -1,0 +1,46 @@
+Designators,Qty,Description,Value,Footprint,Manufacturer,Part number,LCSC,Side
+C1 C10 C11 C22,4,"Ceramic capacitor, 0603",10uF,C0603,,,,bottom
+C2 C4 C23 C24,4,"Polymer capacitor 220 uF 25 V, 6.3 x 8 mm radial",220uF,CAP-TH_BD6.3-P2.50-D0.6-FD-1,JIERR,PA25V220M6x8,C46550441,top
+C5,1,"Polymer capacitor 680 uF 25 V, 8 x 12 mm radial",680uF,CAP-TH_BD8.0-P3.50-D0.6-FD,JIERR,PA25V680M8x12,C46550437,top
+C6,1,"Ceramic capacitor, 0603",100pF,C0603,,,,bottom
+C12,1,"Ceramic capacitor, 0603",10pF,C0603,,,,bottom
+C13 C17 C18,3,"Ceramic capacitor, 0603",0.1uF,C0603,,,,bottom
+C14 C15 C16,3,"Ceramic capacitor, 0603",22uF,C0603,,,,bottom
+C19,1,"Ceramic capacitor, 0603",1uF,C0603,,,,bottom
+C20,1,"Ceramic capacitor, 0603",1uF,C0603,,,,top
+F1,1,"Resettable fuse 3 A hold, 12 V, 1206",,F1206,JK,JK-NSMD300L-12V,C516068,top
+H2 H4,2,"Pin header 1x8, 2.54 mm",,HDR-TH_8P-P2.54-V-M,HC,HC-PZ254-11.5L-1x8PZ,C27985192,top
+H3,1,"Pin header 1x6, 2.54 mm",,HDR-TH_6P-P2.54-V-M,HC,HC-PZ254-11.5L-1x6PZ,C27985191,top
+H5,1,"Pin header 1x10, 2.54 mm",,HDR-TH_10P-P2.54-V-M,HC,HC-PZ254-11.5L-1x10PZ,C27985194,top
+H6 H7 H8 H9,4,"Pin header 1x4, 2.54 mm",,HDR-TH_4P-P2.54-V-M,XFCN,PZ254V-11-04P,C2691448,top
+J1 J2,2,"Pin header 1x20, 2.54 mm",,HDR-TH_20P-P2.54-V-M-1,BOOMELE,2.54-1*20P直针,C50981,top
+L1,1,"Inductor, 0603",1uH,L0603,,,,bottom
+LED2,1,"LED white, 0603",,LED0603-R-RD_WHITE,KENTO,KT-0603W,C2290,top
+LED3,1,"LED blue, 0603",,LED0603-RD,KENTO,KT-0603B,C2288,top
+LED4 LED6,2,"LED green, 0603",,LED0603-RD,KENTO,KT-0603G,C12624,top
+LED5,1,"LED yellow, 0603",,LED0603-R-RD,KENTO,KT-0603Y,C2287,top
+Q1,1,"P-channel MOSFET, TO-252",,TO-252-2_L6.6-W6.1-P4.60-LS10.0-BR-CW,JSMSEMI,SHY19P03D,C49206898,top
+R1 R2 R3 R4 R6 R13 R14 R15 R16 R17 R18,11,"Resistor, 0603",10K,R0603,,,,bottom
+R5 R7 R8 R24 R25,5,"Resistor, 0603",1K,R0603,,,,top
+R9 R12 R33 R34,4,"Resistor, 0603",1,R0603,,,,bottom
+R10,1,"Resistor, 0603",12,R0603,,,,top
+R11,1,"Resistor, 0603",560K,R0603,,,,top
+R19 R21,2,"Resistor, 0603",1M,R0603,,,,bottom
+R20,1,"Resistor, 0603",111K,R0603,,,,bottom
+R22 R23,2,"Resistor, 0603",5.1K,R0603,,,,top
+R26 R27 SJ_A0 SJ_A1 SJ_A2 SJ_A3 SJ_A4 SJ_A5,8,"Resistor, 0603",0,R0603,,,,bottom
+R28,1,"Resistor, 0603",200K,R0603,,,,bottom
+R29 R30,2,"Resistor 0 ohm, 0603",0 ohm,R0603,UNI-ROYAL,0603WAF0000T5E,C21189,top
+RN1 RN2 RN3 RN4,4,"Resistor array 4 x 220 ohm, 0603x4",220 ohm,RES-ARRAY-SMD_0603-8P-L3.2-W1.6-BL,UNI-ROYAL,4D03WGJ0221T5E,C29719,bottom
+SW1,1,"Tactile switch, SMD",,SW-SMD_L3.9-W3.0-P4.45,XUNPU,TS-1088-AR02016,C720477,top
+U1,1,"16-channel 12-bit PWM driver, I2C, TSSOP-28",,TSSOP-28_L9.7-W4.4-P0.65-LS6.4-TL,NXP,"PCA9685PW,118",C2678753,bottom
+U2 U3 U4 U13,4,"Pin header 4x3, 2.54 mm",,HDR-TH_12P-P2.54-V-M-R4-C3-S2.54,hanxia,HX PZ2.54-4x3P ZZ,C32713297,top
+U5,1,"Pin header 2x20, 2.54 mm",,HDR-TH_40P-P2.54-V-M-R2-C20-S2.54,ZHOURI,PZ2.54-2*20,C5224014,top
+U6,1,"Arduino UNO R3 outline (footprint only, no part)",,,,,,bottom
+U8,1,"I2C level translator, 2-bit",,SSOP-8_L2.0-W2.3-P0.50-LS3.1-BR,TI,PCA9306DCUR,C33196,bottom
+U9,1,"PH 2.0 mm 4-pin header, right angle",,CONN-TH_4P-P2.00_BX-PH2.0-4PWZ,XUNPU,WAFER-PH2.0-4PWZ,C5359612,bottom
+U10,1,"Buck-boost converter, WSON-10",,WSON-10_L3.0-W3.0-P0.50-BL-EP-A,TI,TPS63060DSCR,C48567,bottom
+U11,1,"USB to UART bridge, SOP-16",,SOP-16_L10.0-W3.9-P1.27-LS6.0-BL,WCH,CH340C,C84681,bottom
+U12,1,"Socket header 2x4, 2.54 mm, right angle",,HDR-TH_8P-P2.54-H-F-R2-C4-S2.54-W8.5,HC,HC-PM254-8.5H-2x4PW-02A,C42163146,top
+U14,1,"XT60 male, PCB mount",,CONN-TH_XT60PB-M,AMASS,XT60PB-M.G.Y,C19268037,top
+USB1,1,"USB Type-C receptacle, 16-pin",,USB-C-SMD_TYPE-C-6PIN-2MD-073,SHOU HAN,TYPE-C 16PIN 2MD(073),C2765186,bottom
