@@ -177,7 +177,6 @@ a thin wrapper around it. In simulation the `sim` node replaces the IMU and feed
 ## Roadmap
 
 - Reinforcement-learning locomotion policy, trained in the MuJoCo simulation and run through the existing controller and safety layers
-- Gerber, drill and PDF schematic exports of the servo shield in `pcb/`
 
 ## Contributing
 

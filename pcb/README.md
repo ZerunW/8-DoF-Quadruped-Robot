@@ -12,8 +12,9 @@ bom.csv                      bill of materials, taken from the schematic
 ```
 
 The design was drawn in EasyEDA Pro (JLCEDA) and exported in Altium ASCII format. The two
-files open in Altium Designer. KiCad 7 cannot load the layout. Gerber and drill files and a
-PDF of the schematic are not in the repository yet.
+files open in Altium Designer. KiCad 7 cannot load the layout. To order boards or get a PDF
+of the schematic, open the files in Altium Designer or import them into EasyEDA Pro and export
+Gerber, drill, pick-and-place or PDF files from there.
 
 ## Power
 
