@@ -1,0 +1,24 @@
+name: Feature request
+description: Suggest a gait, behavior, tool or hardware change
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What do you want to do that you can't today?
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: Proposed approach
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Control (gait, balance, kinematics)
+        - Hardware drivers
+        - Simulation
+        - Mechanical or electronics
+        - Tooling and docs

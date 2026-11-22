@@ -1,0 +1,38 @@
+name: Bug report
+description: Something does not behave as documented
+labels: [bug]
+body:
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where does it happen?
+      options:
+        - On the robot
+        - In simulation
+        - Build or install
+        - Documentation
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Exact `pixi run` commands or launch arguments, and any changes to `robot_dog.yaml`.
+    validations:
+      required: true
+  - type: textarea
+    id: env
+    attributes:
+      label: Environment
+      description: Host OS and architecture, Pixi version, Pi model if on the robot.
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      render: text

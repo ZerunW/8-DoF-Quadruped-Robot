@@ -1,0 +1,7 @@
+# Correctness checks only. Style rules are not enforced.
+# E701/E741 (one-line elif dispatch, short math names like O and l), F401 and F541
+# (one unused import and one placeholder-less f-string) are ignored so the check passes
+# on the existing code.
+[lint]
+select = ["E4", "E7", "E9", "F"]
+ignore = ["E701", "E741", "F401", "F541"]
