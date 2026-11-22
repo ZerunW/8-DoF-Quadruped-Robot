@@ -27,7 +27,6 @@ setup(
     description='MuJoCo physics simulation of the robot dog (closed-loop legs, hobby-servo '
                 'model, IMU, ground truth)',
     license='MIT',
-    extras_require={'test': ['pytest']},
     entry_points={
         'console_scripts': [
             'sim_node = robot_dog_sim.sim_node:main',

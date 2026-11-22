@@ -32,7 +32,6 @@ setup(
     description='Robot dog URDF (CAD meshes, open-tree 5-bar legs) and joint states from '
                 'the servo state',
     license='MIT',
-    extras_require={'test': ['pytest']},
     entry_points={
         'console_scripts': [
             'joint_state_from_servo_node = '

@@ -26,8 +26,6 @@
   <exec_depend>foxglove_bridge</exec_depend>
   <!-- conda-forge mujoco-python -->
 
-  <test_depend>python3-pytest</test_depend>
-
   <export>
     <build_type>ament_python</build_type>
   </export>

@@ -33,8 +33,8 @@ the same check.
 ## Code style
 
 - Python 3.12, type hints on public functions.
-- Keep ROS-free logic in the core classes (`GaitControllerCore`, kinematics, gait) so tests
-  can drive it directly. Node files should stay thin.
+- Keep ROS-free logic in the core classes (`GaitControllerCore`, kinematics, gait). Node
+  files should stay thin.
 - Parameters belong in `src/robot_dog_bringup/config/robot_dog.yaml`.
 - Comments explain why (units, hardware quirks, frame conventions), not what the line does.
 - Leg order is `lf, rf, lb, rb` and the body frame is REP-103. See
@@ -49,7 +49,8 @@ robot). Test on a stand with the feet free before putting the dog on the ground.
 ## Pull requests
 
 - One change per pull request, with a short description of what and why.
-- Add or update tests under the package's `test/` directory when behavior changes.
+- Run `pixi run test` when you touch the servo driver or the leg collision guard. The tests
+  in `robot_dog_hw/test` and `robot_dog_control/test` cover those two safety layers.
 - Update the docs if topics, parameters or procedures change.
 
 By contributing you agree that your contribution is licensed under the [MIT License](LICENSE).

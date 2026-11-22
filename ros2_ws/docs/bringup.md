@@ -62,5 +62,5 @@ robotdog> pixi run launch_teleop
 | feet scuff | raise `step_height_mm` |
 | body too low or leaning | `stand_height_mm`, `stand_fx_mm` |
 
-Gait timing must keep servo motion at or below 5.6° per 20 ms tick. A test checks every
-configured gait.
+If you change a gait preset, keep servo motion at or below 5.6° per 20 ms tick. The servo
+driver's rate limit (400°/s, 8° per tick) is the hard bound.

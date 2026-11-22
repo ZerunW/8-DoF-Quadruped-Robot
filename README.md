@@ -156,8 +156,8 @@ gamepad / API / topics -->  gait_controller (50 Hz)
                              PCA9685 --> 8 servos
 ```
 
-The controller core (`GaitControllerCore`) has no ROS dependency, which is how the tests and
-the simulation drive it. In simulation the `sim` node replaces the IMU and feeds the driver's
+The controller core (`GaitControllerCore`) has no ROS dependency; the `gait_controller` node is
+a thin wrapper around it. In simulation the `sim` node replaces the IMU and feeds the driver's
 `/servo_state` into the MuJoCo hinges. Details are in
 [ros2_ws/docs/control.md](ros2_ws/docs/control.md) and [docs/](docs/README.md).
 

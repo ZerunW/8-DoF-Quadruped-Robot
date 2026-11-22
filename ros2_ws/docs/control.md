@@ -15,7 +15,6 @@
 ```
 
 `gait_controller` wraps `GaitControllerCore` (`controller.py`), the controller without ROS.
-The tests drive the core directly.
 
 ## Conventions
 
