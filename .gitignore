@@ -1,0 +1,33 @@
+# colcon / ROS 2
+build/
+install/
+log/
+*.egg-info/
+
+# pixi environments (the lock file is tracked)
+.pixi/
+!.pixi/config.toml
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.cache/
+.venv/
+
+# deploy terminal (per-user host and key settings)
+.deploy_history
+.deploy_config
+
+# recordings and generated data
+ros2_ws/data/
+ros2_ws/bags/
+*.mcap
+*.db3
+
+# editors / OS
+.vscode/
+.idea/
+*.swp
+.DS_Store
