@@ -41,10 +41,14 @@ pose with `--level-here`.
 
 ## First walk
 
+With `launch_bringup` running, drive the dog with the gamepad:
+
 ```text
-robotdog> pixi run walk_test -- --speed 0.03 --duration 5
 robotdog> pixi run launch_teleop
 ```
+
+The behavior API in [control.md](control.md#behavior-api) works the same way, for example
+`dog.walk(speed=0.03, duration=5)`.
 
 `pixi run stand` stops the dog, `pixi run relax` turns the servos off, and
 `ros2 service call /gait_controller/estop std_srvs/srv/Trigger` freezes it.

@@ -94,11 +94,12 @@ pixi run launch_sim            # or launch_sim_viewer for the MuJoCo window
 ```
 
 Connect [Foxglove](https://foxglove.dev) to `ws://localhost:8765` and import
-`src/robot_dog_description/foxglove/robot_dog_layout.json`. In a second shell:
+`src/robot_dog_description/foxglove/robot_dog_layout.json`. In a second shell, walk for 5 s with the [behavior API](#behavior-api), then push the body
+sideways:
 
 ```bash
-pixi run walk_test -- --speed 0.08 --duration 5
-pixi run sim_push -- --fy 3 --duration 0.2
+pixi run python -c "from robot_dog_control.api import RobotDog; d = RobotDog(); d.walk(speed=0.08, duration=5); d.close()"
+pixi run ros2 service call /sim/push std_srvs/srv/Trigger    # 3 N to the left for 0.2 s
 ```
 
 See [docs/simulation.md](docs/simulation.md).
@@ -135,8 +136,10 @@ The calibration tools print the new values, and the deploy terminal writes them 
 
 ```text
 robotdog> pixi run launch_bringup
-robotdog> pixi run walk_test -- --speed 0.05 --duration 5
 ```
+
+Then drive it with the [gamepad](#gamepad), the [behavior API](#behavior-api), or the
+keyboard (`pixi run teleop`, which publishes `/cmd_vel`).
 
 To stop, run `pixi run stand`. To freeze, call
 `ros2 service call /gait_controller/estop std_srvs/srv/Trigger`. To turn the servos off, run

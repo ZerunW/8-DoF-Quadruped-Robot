@@ -30,8 +30,6 @@ setup(
     entry_points={
         'console_scripts': [
             'sim_node = robot_dog_sim.sim_node:main',
-            'sim_push = robot_dog_sim.tools.sim_push:main',
-            'sim_reset = robot_dog_sim.tools.sim_reset:main',
         ],
     },
 )

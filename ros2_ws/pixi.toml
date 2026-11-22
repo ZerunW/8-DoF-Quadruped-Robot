@@ -91,10 +91,6 @@ stand         = "ros2 run robot_dog_hw stand"
 imu_check     = "ros2 run robot_dog_hw imu_check"
 leg_test      = "ros2 run robot_dog_control leg_test"
 calib_offsets = "ros2 run robot_dog_control calib_offsets"
-walk_test     = "ros2 run robot_dog_control walk_test"          # -- --speed 0.03 --duration 5
-record        = "ros2 bag record -s mcap -o data/run_$(date +%Y%m%d_%H%M%S) /bno055/imu /servo_cmd /servo_state /gait/debug /cmd_vel"
 
 # Simulation
 build_mjcf = "python src/robot_dog_sim/scripts/build_mjcf.py"   # URDF -> mjcf/robot_dog.xml
-sim_push   = "ros2 run robot_dog_sim sim_push"                  # -- --fy 3 --duration 0.2
-sim_reset  = "ros2 run robot_dog_sim sim_reset"

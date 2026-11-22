@@ -29,6 +29,7 @@ Live parameters of `/sim` include `ground_tilt_roll_deg`, `ground_tilt_pitch_deg
 
 ```bash
 ros2 topic pub -r 10 /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.05}}"
-pixi run sim_push -- --fy 3 --duration 0.2
-pixi run sim_reset
+ros2 param set /sim push_force_n "[0.0, 3.0, 0.0]"    # world frame, N (the default)
+ros2 service call /sim/push std_srvs/srv/Trigger       # applies it for push_duration_s
+ros2 service call /sim/reset std_srvs/srv/Trigger
 ```

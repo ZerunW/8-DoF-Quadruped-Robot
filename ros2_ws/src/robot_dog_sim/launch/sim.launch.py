@@ -5,8 +5,9 @@
     ros2 launch robot_dog_sim sim.launch.py ground_tilt_pitch_deg:=3 payload_mass_kg:=0.2
 
 Nodes: sim, servo_driver, gait_controller, the robot_dog_description 3D model and
-foxglove_bridge. Disturb it with `pixi run sim_push -- --fy 3 --duration 0.2`,
-`pixi run sim_reset` or `ros2 param set /sim ground_tilt_pitch_deg 3.0`.
+foxglove_bridge. Disturb it with `ros2 service call /sim/push std_srvs/srv/Trigger`, reset it
+with `ros2 service call /sim/reset std_srvs/srv/Trigger`, or tilt the ground with
+`ros2 param set /sim ground_tilt_pitch_deg 3.0`.
 """
 
 from launch import LaunchDescription

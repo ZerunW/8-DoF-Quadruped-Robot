@@ -14,8 +14,8 @@ pixi run build
 pixi run test
 ```
 
-Try changes in simulation first (`pixi run launch_sim`, then `pixi run walk_test`). The
-simulation runs the same driver and controller as the robot. See
+Try changes in simulation first (`pixi run launch_sim`, then drive it with the behavior API).
+The simulation runs the same driver and controller as the robot. See
 [ros2_ws/docs/simulation.md](ros2_ws/docs/simulation.md).
 
 ## Checks

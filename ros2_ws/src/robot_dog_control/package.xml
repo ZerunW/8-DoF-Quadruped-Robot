@@ -3,7 +3,7 @@
 <package format="3">
   <name>robot_dog_control</name>
   <version>0.1.0</version>
-  <description>Robot dog control: 5-bar leg FK/IK, gait generator, body pose layer, IMU leveling and heading hold, gait controller node, behavior API, gamepad teleop, calibration and test tools.</description>
+  <description>Robot dog control: 5-bar leg FK/IK, gait generator, body pose layer, IMU leveling and heading hold, gait controller node, behavior API, gamepad teleop, calibration tools.</description>
   <maintainer email="zerunwang@gatech.edu">Zerun Wang</maintainer>
   <license>MIT</license>
 

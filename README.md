@@ -44,11 +44,11 @@ pixi install && pixi run build
 pixi run launch_sim            # headless; Foxglove bridge on ws://localhost:8765
 ```
 
-In a second shell:
+In a second shell, walk for 5 s with the behavior API, then push the body sideways:
 
 ```bash
-pixi run walk_test -- --speed 0.08 --duration 5
-pixi run sim_push -- --fy 3 --duration 0.2
+pixi run python -c "from robot_dog_control.api import RobotDog; d = RobotDog(); d.walk(speed=0.08, duration=5); d.close()"
+pixi run ros2 service call /sim/push std_srvs/srv/Trigger    # 3 N to the left for 0.2 s
 ```
 
 Use `pixi run launch_sim_viewer` for the MuJoCo window. For the robot, see
@@ -118,14 +118,13 @@ robotdog> config                    # host, user, deploy directory, SSH key
 robotdog> pixi run build
 robotdog> pixi run launch_driver    # servo driver only, holds the stand pose
 robotdog> pixi run launch_bringup   # full stack: stands up and levels
-robotdog> pixi run walk_test -- --speed 0.05 --duration 5
 ```
 
 Calibrate servo offsets and the IMU level on first power-up with `servo_tune`, `leg_test`,
 `imu_check` and `calib_offsets`. The procedure is in
-[ros2_ws/docs/bringup.md](ros2_ws/docs/bringup.md). With a gamepad, run
-`pixi run launch_bringup teleop:=true` (L1 is the deadman, Cross is emergency stop). Stop
-with `pixi run stand`; turn the servos off with `pixi run relax`.
+[ros2_ws/docs/bringup.md](ros2_ws/docs/bringup.md). Drive it with a gamepad
+(`pixi run launch_bringup teleop:=true`; L1 is the deadman, Cross is emergency stop) or from
+Python as below. Stop with `pixi run stand`; turn the servos off with `pixi run relax`.
 
 Control from Python:
 

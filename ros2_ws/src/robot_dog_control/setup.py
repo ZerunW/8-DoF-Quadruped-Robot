@@ -28,7 +28,6 @@ setup(
             'gamepad_teleop = robot_dog_control.gamepad_teleop_node:main',
             'leg_test = robot_dog_control.tools.leg_test:main',
             'calib_offsets = robot_dog_control.tools.calib_offsets:main',
-            'walk_test = robot_dog_control.tools.walk_test:main',
         ],
     },
 )
